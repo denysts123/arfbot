@@ -11,27 +11,18 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-import colorama
-
-from utils import logger
+from utils import logger, bootstrap
 from models import User
-
-colorama.init(autoreset=True)
-
 
 load_dotenv(dotenv_path=".env")
 BOT_TOKEN = getenv("BOT_TOKEN")
 
-if not BOT_TOKEN:
-    print(colorama.Fore.RED + "Error: BOT_TOKEN environment variable is not set.")
-    sys.exit(1)
-
 dp = Dispatcher()
+
 
 @dp.message(CommandStart())
 async def send_welcome(message: Message):
-    """Handle the /start command.
-    Send a welcome message to the user."""
+    """Handle the /start command. Send a welcome message to the user."""
     user_data = await User(user_id=message.from_user.id).get_user()
     await message.answer(f"ID: {user_data[0]}\n"
                          f"Имя: {user_data[1]}\n"
@@ -41,18 +32,17 @@ async def send_welcome(message: Message):
                          f"О игроке: \n{user_data[2]}")
 
 
-
 async def start_bot() -> None:
+    """Start the bot with connection test and polling."""
     logger.info("Starting bot...")
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     try:
-        await bot.get_me() # Test bot connection
-    except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e: # Catch connection errors
+        await bot.get_me()  # Test bot connection
+    except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e:
         logger.critical(f"Can't start bot: {e}")
         if bot:
             await bot.session.close()
-        input("\033[96mPress enter to exit...\033[0m")
-        exit(1)
+        sys.exit(1)
     else:
         logger.info("Bot successfully started.")
         logger.info("Bot information:")
@@ -61,8 +51,11 @@ async def start_bot() -> None:
         logger.info(f"ID: {bot_info.id}")
         await dp.start_polling(bot)
 
+
 async def main() -> None:
-    
+    """Main entry point: perform checks and start the bot."""
+    bootstrap.bootstrap()
+    await start_bot()
 
 
 if __name__ == "__main__":

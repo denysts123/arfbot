@@ -11,27 +11,26 @@ import sqlite3
 from pathlib import Path
 from importlib.metadata import version, PackageNotFoundError
 
-PKGS = ["aiogram", "aiosqlite", "loguru", "colorama", "python-dotenv"]
-VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS"]
+PKGS = ["aiogram", "aiosqlite", "loguru", "python-dotenv"]
+VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS", "ADMIN_IDS", "LOG_LEVEL"]
 
 RED = '\033[31m'
 YELLOW = '\033[33m'
 RESET = '\033[0m'
 
-def _load_dotenv_from(path):
+def _load_dotenv_from(path: Path):
     """Simple .env loader: reads key=value pairs and sets them in os.environ if not already set."""
-    if not path or not path.exists():
+    if not path.exists():
         return
     try:
-        with open(path, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip().upper(), v.strip().strip("'\""))
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip().upper(), v.strip().strip("'\""))
     except Exception:
-        return
+        pass
 
 def read_dotenv():
     """Search and load .env file if it exists."""
@@ -60,6 +59,20 @@ def check_env_vars(vars_list):
     """Checks for required environment variables, returns list of error messages."""
     return [f"Missing variable: {v.upper()}" for v in vars_list if not os.environ.get(v.upper())]
 
+def get_schema_items(db_path, init_sql=None):
+    """Returns set of (type, name) tuples for tables and indexes, optionally executing init_sql in memory."""
+    if init_sql:
+        conn = sqlite3.connect(":memory:")
+        conn.executescript(init_sql)
+    else:
+        conn = sqlite3.connect(db_path)
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT type, name FROM sqlite_master WHERE type IN ('table', 'index') AND name NOT LIKE 'sqlite_%'")
+        return set(cursor.fetchall())
+    finally:
+        conn.close()
+
 def check_and_get_db_info(db_path):
     """Checks database and returns errors list and differences string."""
     if not db_path:
@@ -77,25 +90,23 @@ def check_and_get_db_info(db_path):
     
     try:
         init_sql = init_sql_path.read_text(encoding='utf-8')
-        
-        with sqlite3.connect(":memory:") as conn_temp:
-            conn_temp.executescript(init_sql)
-            cursor_temp = conn_temp.cursor()
-            cursor_temp.execute("SELECT type, name FROM sqlite_master WHERE type IN ('table', 'index') AND name NOT LIKE 'sqlite_%'")
-            expected_items = set(cursor_temp.fetchall())
-        
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT type, name FROM sqlite_master WHERE type IN ('table', 'index') AND name NOT LIKE 'sqlite_%'")
-            current_items = set(cursor.fetchall())
+        expected_items = get_schema_items(":memory:", init_sql)
+        current_items = get_schema_items(db_path)
         
         missing = expected_items - current_items
         extra = current_items - expected_items
-        errors = [f"Missing database items: {missing}"] if missing else []
+        
         missing_tables = sorted([n for t, n in missing if t == 'table'])
         missing_indexes = sorted([n for t, n in missing if t == 'index'])
         extra_tables = sorted([n for t, n in extra if t == 'table'])
         extra_indexes = sorted([n for t, n in extra if t == 'index'])
+        
+        errors = []
+        if missing_tables:
+            errors.append(f"Missing Tables: {', '.join(missing_tables)}")
+        if missing_indexes:
+            errors.append(f"Missing Indexes: {', '.join(missing_indexes)}")
+        
         diff_parts = []
         if missing_tables:
             diff_parts.append(f"Missing Tables: {', '.join(missing_tables)}")
@@ -115,7 +126,8 @@ def check_and_get_db_info(db_path):
         return [msg], msg
 
 def check_database(db_path):
-    """Checks if the SQLite database file exists, is accessible, and has the required tables and indexes as per init.sql, returns list of error messages."""
+    """Checks if the SQLite database file exists, is accessible, and has the required tables and indexes as per 
+    init.sql, returns list of error messages."""
     errors, _ = check_and_get_db_info(db_path)
     return errors
 
@@ -137,15 +149,9 @@ def bootstrap():
     if errors:
         error_msg = "Unable to start bot:\n" + "\n".join(errors)
         print(f"{RED}{error_msg}{RESET}")
-        if db_path:
-            diff_msg = get_db_differences(db_path)
-            print(f"{YELLOW}DB differences: {diff_msg}{RESET}")
         sys.exit(1)
     elif db_path:
         diff_msg = get_db_differences(db_path)
         if diff_msg != "No differences":
             print(f"{YELLOW}Warning: DB does not match the schema, additional elements detected{RESET}")
             print(f"{YELLOW}{diff_msg}{RESET}")
-
-
-bootstrap()
