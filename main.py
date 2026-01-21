@@ -19,7 +19,6 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 
 dp = Dispatcher()
 
-
 @dp.message(CommandStart())
 async def send_welcome(message: Message):
     """Handle the /start command. Send a welcome message to the user."""
@@ -30,7 +29,6 @@ async def send_welcome(message: Message):
                          f"Билеты: {user_data[9]}\n"
                          f"Кубки: {user_data[10]}\n"
                          f"О игроке: \n{user_data[2]}")
-
 
 async def start_bot() -> None:
     """Start the bot with connection test and polling."""
@@ -51,12 +49,10 @@ async def start_bot() -> None:
         logger.info(f"ID: {bot_info.id}")
         await dp.start_polling(bot)
 
-
 async def main() -> None:
     """Main entry point: perform checks and start the bot."""
     bootstrap.bootstrap()
     await start_bot()
-
 
 if __name__ == "__main__":
     asyncio.run(main())

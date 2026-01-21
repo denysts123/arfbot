@@ -68,7 +68,8 @@ def get_schema_items(db_path, init_sql=None):
         conn = sqlite3.connect(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT type, name FROM sqlite_master WHERE type IN ('table', 'index') AND name NOT LIKE 'sqlite_%'")
+        cursor.execute("SELECT type, name FROM sqlite_master WHERE type IN ('table', 'index') AND name NOT LIKE "
+                       "'sqlite_%'")
         return set(cursor.fetchall())
     finally:
         conn.close()
