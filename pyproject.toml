@@ -7,4 +7,6 @@ dependencies = [
     "aiogram>=3.24.0",
     "aiosqlite>=0.22.1",
     "colorama>=0.4.6",
+    "loguru>=0.7.3",
+    "python-dotenv>=1.2.1",
 ]
