@@ -1,10 +1,10 @@
 ﻿import asyncio
 import sys
 from os import getenv
+from dotenv import load_dotenv
+from functools import wraps
 
 import aiogram.exceptions
-from dotenv import load_dotenv
-
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -19,7 +19,22 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 
 dp = Dispatcher()
 
+
+def is_banned(func):
+    """Check if a user is banned. Working as decorator."""
+
+    @wraps(func)
+    async def wrapper(message: Message):
+        user = User(user_id=message.from_user.id)
+        if await user.is_banned():
+            await message.answer("Вы забанены и не можете использовать этого бота.\n"
+                                 f"Дата окончания бана: {await user.get_ban_date()}\n")
+            return None
+        return await func(message)
+
+
 @dp.message(CommandStart())
+@is_banned
 async def send_welcome(message: Message):
     """Handle the /start command. Send a welcome message to the user."""
     user_data = await User(user_id=message.from_user.id).get_user()
@@ -30,7 +45,9 @@ async def send_welcome(message: Message):
                          f"Кубки: {user_data[10]}\n"
                          f"О игроке: \n{user_data[2]}")
 
+
 @dp.message(Command("full_info"))
+@is_banned
 async def send_full_info(message: Message):
     """Handle the /full_info command. Send full user information."""
     user = User(user_id=message.from_user.id)
@@ -51,7 +68,8 @@ async def send_full_info(message: Message):
                          f"{user_data[22]} маленьких\n"
                          f"{user_data[23]} средних\n"
                          f"{user_data[24]} больших\n"
-                         f"Дата регистрации: {[user_data[29]]}\n"
+                         f"Приглашено людей по реферальной ссылке: {user_data[16]}\n"
+                         f"Дата регистрации: {user_data[29]}\n"
                          f"\nТакже учтите что некоторое количество этих ресурсов не будет учитыватся если они выданы вам от "
                          f"администраторов (т.е. призрачные):\n"
                          f"Призрачные маленькие паки: {user_data[19]}\n"
@@ -61,9 +79,10 @@ async def send_full_info(message: Message):
                          f"\n\n"
                          f"Ваша итоговая успешность: {await user.calculate_success()}\n"
                          f"Вы находитесь на {await user.get_user_position()} месте в топе бота\n"
-                         f"Ваш ранг: {None}\n" # TODO: Add value
-                         f"Уровень ФП: {None}Н/Д (скоро)" # TODO: Add value
-    )
+                         f"Ваш ранг: {None}\n"  # TODO: Add value
+                         f"Уровень ФП: {None}Н/Д (скоро)"  # TODO: Add value
+                         )
+
 
 async def start_bot() -> None:
     """Start the bot with connection test and polling."""
@@ -84,10 +103,12 @@ async def start_bot() -> None:
         logger.info(f"ID: {bot_info.id}")
         await dp.start_polling(bot)
 
+
 async def main() -> None:
     """Main entry point: perform checks and start the bot."""
     bootstrap.bootstrap()
     await start_bot()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

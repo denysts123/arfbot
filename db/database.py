@@ -43,3 +43,33 @@ class Database:
         except Exception as e:
             logger.error(f"Error retrieving position for user {user_id}: {e}")
             return None
+    
+    async def is_banned(self, user_id: int) -> bool:
+        """Check if a user is banned."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                cursor = await db.execute("SELECT IsBanned FROM Users WHERE UserId = ?", (user_id,))
+                result = await cursor.fetchone()
+                await cursor.close()
+                if result:
+                    return result[0] == 1
+                else:
+                    return False
+        except Exception as e:
+            logger.error(f"Error checking ban status for user {user_id}: {e}")
+            return False
+    
+    async def get_ban_date(self, user_id: int) -> str | None:
+        """Retrieve the ban date for a user."""
+        try:
+            async with aiosqlite.connect(self.db_path) as db:
+                cursor = await db.execute("SELECT BanEnd FROM Users WHERE UserId = ?", (user_id,))
+                result = await cursor.fetchone()
+                await cursor.close()
+                if result:
+                    return result[0]
+                else:
+                    return None
+        except Exception as e:
+            logger.error(f"Error retrieving ban date for user {user_id}: {e}")
+            return None

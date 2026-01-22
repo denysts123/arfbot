@@ -66,3 +66,11 @@ class User:
         return (ghost_small_packs * constants.GHOST_SMALL_PACKS_COEFFICIENT +
                 ghost_medium_packs * constants.GHOST_MEDIUM_PACKS_COEFFICIENT +
                 ghost_big_packs * constants.GHOST_BIG_PACKS_COEFFICIENT)
+    
+    async def is_banned(self) -> bool:
+        """Check if the user is banned."""
+        return await self.db.is_banned(self.user_id)
+    
+    async def get_ban_date(self) -> str | None:
+        """Retrieve the ban end date for the user."""
+        return await self.db.get_ban_date(self.user_id)
