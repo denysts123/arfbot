@@ -32,7 +32,7 @@ ARCHIVE_DIR_PATH.mkdir(parents=True, exist_ok=True)
 LOG_FILE_PATH = LOGS_DIR_PATH / LOG_FILE_NAME
 
 logger.remove()
-logger.level("DEBUG", color="<cyan>")
+logger.level("DEBUG", color="<dim>")
 logger.level("INFO", color="<green>")
 logger.level("WARNING", color="<yellow>")
 logger.level("ERROR", color="<red>")
@@ -44,8 +44,8 @@ logger.add(
     sys.stderr,
     format=(
         "<white>{time:YYYY-MM-DD HH:mm:ss}</white> "
-        "<level>{level: >8}</level> "
-        "<cyan>{module}:{function: <20}</cyan> │ "
+        "<level>{level: <8}</level> "
+        "<cyan>{module: <15}:{function: <25}</cyan> │ "
         "<level>{message}</level>"
     ),
     colorize=True,
@@ -91,7 +91,7 @@ LOG_FILE_PATH.touch()
 
 logger.add(
     str(LOG_FILE_PATH),
-    format="{time:YYYY-MM-DD HH:mm:ss} {level: <8} {module}:{function: <20} │ {message}",
+    format="{time:YYYY-MM-DD HH:mm:ss} {level: <8} {module: <15}:{function: <25} │ {message}",
     colorize=False,
     level="DEBUG",
     enqueue=True,
