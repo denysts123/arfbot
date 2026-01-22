@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 from utils import logger, bootstrap
@@ -29,6 +29,41 @@ async def send_welcome(message: Message):
                          f"Билеты: {user_data[9]}\n"
                          f"Кубки: {user_data[10]}\n"
                          f"О игроке: \n{user_data[2]}")
+
+@dp.message(Command("full_info"))
+async def send_full_info(message: Message):
+    """Handle the /full_info command. Send full user information."""
+    user = User(user_id=message.from_user.id)
+    user_data = await user.get_user()
+    await message.answer(f"Статистика игрока \"{user_data[1]}\"\n"
+                         f"Монеты: {user_data[8]}\n"
+                         f"Билеты: {user_data[9]}\n"
+                         f"Кубки: {user_data[10]}\n"
+                         f"\n"
+                         f"Всего получено монет: {user_data[17]}\n"
+                         f"Всего получено билетов: {user_data[18]}\n"
+                         f"Всего сыграно матчей: {user_data[13]}\n"
+                         f"Из них вы:\n"
+                         f"{user_data[11]} раз выиграли ({await user.get_win_rate_percent():.2f}%)\n"
+                         f"{user_data[12]} раз проиграли\n"
+                         f"{user_data[13] - (user_data[11] + user_data[12])} раз вышли в ничью\n"
+                         f"Открыто паков:\n"
+                         f"{user_data[22]} маленьких\n"
+                         f"{user_data[23]} средних\n"
+                         f"{user_data[24]} больших\n"
+                         f"Дата регистрации: {[user_data[29]]}\n"
+                         f"\nТакже учтите что некоторое количество этих ресурсов не будет учитыватся если они выданы вам от "
+                         f"администраторов (т.е. призрачные):\n"
+                         f"Призрачные маленькие паки: {user_data[19]}\n"
+                         f"Призрачные средние паки: {user_data[20]}\n"
+                         f"Призрачные большие паки: {user_data[21]}\n"
+                         f"Неучтенная успешность: {await user.calculate_ghost_success()}\n"
+                         f"\n\n"
+                         f"Ваша итоговая успешность: {await user.calculate_success()}\n"
+                         f"Вы находитесь на {await user.get_user_position()} месте в топе бота\n"
+                         f"Ваш ранг: {None}\n" # TODO: Add value
+                         f"Уровень ФП: {None}Н/Д (скоро)" # TODO: Add value
+    )
 
 async def start_bot() -> None:
     """Start the bot with connection test and polling."""
