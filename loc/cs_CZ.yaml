@@ -1,0 +1,50 @@
+﻿config:
+  loc_name: "Čeština (CZ)"
+  loc_flag: "🇨🇿"
+messages:
+  welcome: |
+    ID: {user_id}
+    Jméno: {username}
+    Mince: {coins}
+    Lístky: {tickets}
+    Poháry: {cups}
+    O hráči:
+    {user_info}
+  full_info: |
+    Statistiky hráče "{username}"
+    Mince: {coins}
+    Lístky: {tickets}
+    Poháry: {cups}
+
+    Celkem získáno mincí: {received_coins}
+    Celkem získáno lístků: {received_tickets}
+    Celkem odehráno zápasů: {games_played}
+    Z toho jste:
+    {victories}krát vyhráli ({win_rate:.2f}%)
+    {defeats}krát prohráli
+    {draws}krát remizovali
+    Otevřeno balíčků:
+    {small_packs} malých
+    {medium_packs} středních
+    {big_packs} velkých
+    Pozváno lidí prostřednictvím referenčního odkazu: {referrals}
+    Datum registrace: {register_date}
+
+    Také si uvědomte, že některé množství těchto zdrojů nebude započítáno, pokud vám byly vydány správci (tj. duchové):
+    Duchové malé balíčky: {ghost_small}
+    Duchové střední balíčky: {ghost_medium}
+    Duchové velké balíčky: {ghost_big}
+    Nezapočítaný úspěch: {ghost_success}
+
+
+    Váš celkový úspěch: {success}
+    Nacházíte se na {position} místě v topu bota
+    Vaše hodnost: {rank}
+    Úroveň FP: {fp_level}N/A (brzy)
+  banned: "Jste zakázáni a nemůžete používat tohoto bota.\nDatum ukončení zákazu: {ban_date}"
+  user_not_found: "Uživatel nebyl nalezen."
+  select_lang: "Vyberte svůj jazyk:"
+  lang_changed: "Jazyk byl úspěšně změněn!"
+  select_name: "Zadejte prosím své jméno pro registraci:"
+  name_empty: "Jméno nemůže být prázdné. Zadejte prosím své jméno:"
+

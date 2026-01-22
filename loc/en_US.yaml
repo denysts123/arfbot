@@ -1,3 +1,50 @@
 config:
   loc_name: "English (US)"
   loc_flag: "🇺🇸"
+messages:
+  welcome: |
+    ID: {user_id}
+    Name: {username}
+    Coins: {coins}
+    Tickets: {tickets}
+    Cups: {cups}
+    About player:
+    {user_info}
+  full_info: |
+    Player statistics "{username}"
+    Coins: {coins}
+    Tickets: {tickets}
+    Cups: {cups}
+
+    Total coins received: {received_coins}
+    Total tickets received: {received_tickets}
+    Total matches played: {games_played}
+    Of which you:
+    {victories} times won ({win_rate:.2f}%)
+    {defeats} times lost
+    {draws} times drew
+    Packs opened:
+    {small_packs} small
+    {medium_packs} medium
+    {big_packs} big
+    People invited via referral link: {referrals}
+    Registration date: {register_date}
+
+    Also note that some resources will not be counted if they were issued by administrators (i.e., ghost):
+    Ghost small packs: {ghost_small}
+    Ghost medium packs: {ghost_medium}
+    Ghost big packs: {ghost_big}
+    Uncounted success: {ghost_success}
+
+
+    Your total success: {success}
+    You are in {position} place in the bot's top
+    Your rank: {rank}
+    FP level: {fp_level}N/A (soon)
+  banned: "You are banned and cannot use this bot.\nBan end date: {ban_date}"
+  user_not_found: "User not found."
+  select_lang: "Select your language:"
+  lang_changed: "Language changed successfully!"
+  select_name: "Please enter your name for registration:"
+  name_empty: "Name cannot be empty. Please enter your name:"
+

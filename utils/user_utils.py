@@ -1,6 +1,4 @@
-﻿from aiogram.types import Message
-
-from utils import logger
+﻿from utils import logger
 import game.constants as constants
 from db.database import Database
 
@@ -8,7 +6,7 @@ db = Database()
 
 
 async def get_user(user_id: int) -> tuple | None:
-    """Получить данные пользователя из базы данных."""
+    """Retrieve user data from the database by user ID."""
     logger.debug(f"Fetching user data for user_id {user_id}.")
     user = await db.get_user(user_id)
     logger.info(f"Retrieved user data for user ID {user_id}")
@@ -19,25 +17,25 @@ async def get_user(user_id: int) -> tuple | None:
 
 
 async def is_banned(user_id: int) -> bool:
-    """Проверить, забанен ли пользователь."""
+    """Check if a user is banned."""
     logger.debug(f"Checking ban status for user_id {user_id}.")
     return await db.is_banned(user_id)
 
 
 async def get_ban_date(user_id: int) -> str | None:
-    """Получить дату окончания бана пользователя."""
+    """Retrieve the ban end date for a user."""
     logger.debug(f"Fetching ban date for user_id {user_id}.")
     return await db.get_ban_date(user_id)
 
 
-async def create_user(user_id: int, message: Message) -> None:
-    """Создать нового пользователя. Пока пустая функция для будущей реализации."""
+async def create_user(user_id: int, name: str, lang: str) -> None:
+    """Create a new user in the database with the provided name and language."""
     logger.debug(f"Creating new user for user_id {user_id}.")
-    pass
+    await db.create_user(user_id, name, lang)
 
 
 async def get_full_stats(user_id: int) -> dict | None:
-    """Получить все статистики пользователя в одном словаре."""
+    """Calculate and return comprehensive user statistics including win rate, success, and position."""
     logger.debug(f"Fetching full stats for user_id {user_id}.")
     user_data = await db.get_user(user_id)
     if user_data is None:
@@ -79,3 +77,11 @@ async def get_full_stats(user_id: int) -> dict | None:
         "ghost_success": ghost_success,
         "position": position
     }
+
+
+async def change_user_lang(user_id: int, lang: str) -> None:
+    """Change the user's language and update the cache."""
+    logger.debug(f"Changing language for user_id {user_id} to {lang}.")
+    await db.update_user_lang(user_id, lang)
+    from utils.localization import update_user_lang_cache
+    update_user_lang_cache(user_id, lang)

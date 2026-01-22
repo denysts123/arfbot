@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS "Users" (
 	"Warns"	INTEGER NOT NULL DEFAULT 0,
 	"Level"	INTEGER NOT NULL DEFAULT 4,
 	"RegisterDate"	TEXT,
+	"Lang"	TEXT DEFAULT 'en_US',
 	PRIMARY KEY("UserId")
 );
 CREATE INDEX IF NOT EXISTS "idx_success" ON "LeaderboardUsers" (
