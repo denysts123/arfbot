@@ -10,6 +10,7 @@ import sys
 import sqlite3
 from pathlib import Path
 from importlib.metadata import version, PackageNotFoundError
+import asyncio
 
 PKGS = ["aiogram", "aiosqlite", "loguru", "python-dotenv"]
 VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS", "ADMIN_IDS", "LOG_LEVEL"]
@@ -17,6 +18,8 @@ VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS", "
 RED = '\033[31m'
 YELLOW = '\033[33m'
 RESET = '\033[0m'
+
+cached_schema_hash = None
 
 def _load_dotenv_from(path: Path):
     """Simple .env loader: reads key=value pairs and sets them in os.environ if not already set."""
@@ -76,6 +79,7 @@ def get_schema_items(db_path, init_sql=None):
 
 def check_and_get_db_info(db_path):
     """Checks database and returns errors list and differences string."""
+    global cached_schema_hash
     if not db_path:
         return ["Database path not set"], "Database path not set"
     db_file = Path(db_path)
@@ -93,6 +97,11 @@ def check_and_get_db_info(db_path):
         init_sql = init_sql_path.read_text(encoding='utf-8')
         expected_items = get_schema_items(":memory:", init_sql)
         current_items = get_schema_items(db_path)
+        
+        hash_current = hash(str(sorted(current_items)))
+        if cached_schema_hash is not None and cached_schema_hash == hash_current:
+            return [], "No differences"
+        cached_schema_hash = hash_current
         
         missing = expected_items - current_items
         extra = current_items - expected_items
@@ -137,22 +146,24 @@ def get_db_differences(db_path):
     _, diff_str = check_and_get_db_info(db_path)
     return diff_str
 
-def bootstrap():
-    """Main bootstrap function to perform all checks."""
+async def bootstrap():
+    """Main bootstrap function to perform all checks asynchronously."""
     read_dotenv()
 
-    errors = []
-    errors.extend(check_packages(PKGS))
-    errors.extend(check_env_vars(VARS))
     db_path = os.environ.get("DB_PATH")
-    errors.extend(check_database(db_path))
+    errors_lists = await asyncio.gather(
+        asyncio.to_thread(check_packages, PKGS),
+        asyncio.to_thread(check_env_vars, VARS),
+        asyncio.to_thread(check_database, db_path)
+    )
+    errors = [error for sublist in errors_lists for error in sublist]
 
     if errors:
         error_msg = "Unable to start bot:\n" + "\n".join(errors)
         print(f"{RED}{error_msg}{RESET}")
         sys.exit(1)
     elif db_path:
-        diff_msg = get_db_differences(db_path)
+        diff_msg = await asyncio.to_thread(get_db_differences, db_path)
         if diff_msg != "No differences":
             print(f"{YELLOW}Warning: DB does not match the schema, additional elements detected{RESET}")
             print(f"{YELLOW}{diff_msg}{RESET}")

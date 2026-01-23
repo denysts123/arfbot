@@ -2,10 +2,10 @@
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
-from utils import logger
-from utils.user_utils import get_user, create_user
-from utils.localization import get_translation
-from utils.text_formatters import format_welcome_message
+from utils.logging import logger
+from utils.user import get_user, create_user
+from utils.i18n import get_translation
+from utils.formatters import format_welcome_message
 
 
 class RegistrationStates(StatesGroup):

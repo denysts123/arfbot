@@ -1,5 +1,5 @@
 ﻿from db.database import Database
-from utils.localization import tr
+from utils.i18n import tr
 
 db = Database()
 

@@ -4,9 +4,9 @@ from typing import Callable
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
-from utils import logger
-from utils.user_utils import get_user, is_banned as is_banned_func, get_ban_date
-from utils.localization import tr, get_translation
+from utils.logging import logger
+from utils.user import get_user, is_banned as is_banned_func, get_ban_date
+from utils.i18n import tr, get_translation
 from handlers.registration import RegistrationStates, get_lang_from_code
 
 

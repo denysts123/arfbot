@@ -2,63 +2,34 @@
 import sys
 from os import getenv
 from dotenv import load_dotenv
+from pathlib import Path
 
 import aiogram.exceptions
-from aiogram import Bot, Dispatcher, F
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, CallbackQuery
 
-from utils import logger, bootstrap
-from utils.decorators import check_user
-from handlers.registration import RegistrationStates, process_name
-from handlers.commands import send_welcome, send_full_info, send_change_lang, handle_lang_change
+from utils.logging import logger
+from utils.bootstrap_dir import bootstrap
+from handlers.commands import setup_handlers
 
-load_dotenv(dotenv_path=".env")
+env_path = Path(__file__).parent / '.env'
+load_dotenv(dotenv_path=env_path)
+
 BOT_TOKEN = getenv("BOT_TOKEN")
 
 
 dp = Dispatcher()
 
-dp.message.register(process_name, RegistrationStates.waiting_for_name)
-
-
-@dp.message(CommandStart())
-@check_user
-async def start_handler(message: Message):
-    """Handle the /start command."""
-    await send_welcome(message)
-
-
-@dp.message(Command("full_info"))
-@dp.callback_query(F.data == "full_info")
-@check_user
-async def full_info_handler(update: Message | CallbackQuery):
-    """Handle the /full_info command or callback."""
-    await send_full_info(update)
-
-
-@dp.message(Command("changelang"))
-@check_user
-async def changelang_handler(message: Message):
-    """Handle the /changelang command."""
-    await send_change_lang(message)
-
-
-@dp.callback_query(F.data.startswith("lang:"))
-@check_user
-async def lang_change_handler(callback: CallbackQuery):
-    """Handle language change callback."""
-    await handle_lang_change(callback)
+setup_handlers(dp)
 
 
 async def start_bot() -> None:
-    """Start the bot with connection test and polling."""
+    """Starts the bot by establishing a connection, verifying bot credentials, logging essential information, and initiating the polling loop for handling updates."""
     logger.info("Starting bot...")
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     try:
-        await bot.get_me()  # Test bot connection
+        await bot.get_me()
     except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e:
         logger.critical(f"Can't start bot: {e}")
         if bot:
@@ -74,8 +45,8 @@ async def start_bot() -> None:
 
 
 async def main() -> None:
-    """Main entry point: perform checks and start the bot."""
-    bootstrap.bootstrap() # Perform initial setup with bootstrap.py
+    """Serves as the main entry point of the application, executing bootstrap procedures for initial setup and subsequently starting the bot."""
+    await bootstrap()
     await start_bot()
 
 

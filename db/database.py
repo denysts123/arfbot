@@ -1,12 +1,14 @@
 ﻿from os import getenv
 from dotenv import load_dotenv
+from pathlib import Path
 from typing import Optional, Tuple
 
 import aiosqlite
 
-from utils import logger
+from utils.logging import logger
 
-load_dotenv(dotenv_path="../.env")
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 class Database:
     """Handles all database operations for the application."""

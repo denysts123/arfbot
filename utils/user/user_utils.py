@@ -1,4 +1,5 @@
-﻿from utils import logger
+﻿import asyncio
+from utils.logging import logger
 import game.constants as constants
 from db.database import Database
 
@@ -37,7 +38,7 @@ async def create_user(user_id: int, name: str, lang: str) -> None:
 async def get_full_stats(user_id: int) -> dict | None:
     """Calculate and return comprehensive user statistics including win rate, success, and position."""
     logger.debug(f"Fetching full stats for user_id {user_id}.")
-    user_data = await db.get_user(user_id)
+    user_data, position = await asyncio.gather(db.get_user(user_id), db.get_user_position(user_id))
     if user_data is None:
         logger.warning(f"User data not found for user_id {user_id} in get_full_stats.")
         return None
@@ -67,7 +68,6 @@ async def get_full_stats(user_id: int) -> dict | None:
                      ghost_big_packs * constants.GHOST_BIG_PACKS_COEFFICIENT)
 
     success = skill + resources + bonus - ghost_success
-    position = await db.get_user_position(user_id)
 
     logger.debug(f"Calculated stats for user_id {user_id}: success={success}, position={position}.")
     return {
@@ -83,5 +83,5 @@ async def change_user_lang(user_id: int, lang: str) -> None:
     """Change the user's language and update the cache."""
     logger.debug(f"Changing language for user_id {user_id} to {lang}.")
     await db.update_user_lang(user_id, lang)
-    from utils.localization import update_user_lang_cache
+    from utils.i18n import update_user_lang_cache
     update_user_lang_cache(user_id, lang)

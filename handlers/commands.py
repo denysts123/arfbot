@@ -1,9 +1,14 @@
 ﻿from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram import Dispatcher, F
+from aiogram.filters import CommandStart, Command
+from aiogram.fsm.context import FSMContext
 
-from utils import logger
-from utils.user_utils import get_user, get_full_stats, change_user_lang
-from utils.localization import tr, locales
-from utils.text_formatters import format_welcome_message, format_full_info_message
+from utils.logging import logger
+from utils.user import get_user, get_full_stats, change_user_lang
+from utils.i18n import tr, locales
+from utils.formatters import format_welcome_message, format_full_info_message
+from utils.auth import check_user
+from handlers.registration import RegistrationStates, process_name
 
 
 async def send_welcome(message: Message):
@@ -47,13 +52,41 @@ async def send_change_lang(message: Message):
 
 
 async def handle_lang_change(callback: CallbackQuery):
-    """Handle language change callback."""
+    """Handles the callback query for language selection, updates the user's language in the database and cache, and confirms the change to the user."""
     user_id = callback.from_user.id
     lang = callback.data.split(":")[1]
     logger.debug(f"Handling language change for user {user_id} to {lang}.")
     await change_user_lang(user_id, lang)
-    # Get confirmation message in new language
     confirm_text = await tr(user_id, 'messages.lang_changed')
     await callback.answer(confirm_text, show_alert=True)
-    # Optionally, edit the message or send a new one
     await callback.message.edit_text(confirm_text)
+
+
+def setup_handlers(dp: Dispatcher):
+    """Registers all handlers with the dispatcher."""
+    dp.message.register(process_name, RegistrationStates.waiting_for_name)
+
+    @dp.message(CommandStart())
+    @check_user
+    async def start_handler(message: Message, state: FSMContext = None):
+        """Handles the /start command by sending a welcome message to the user."""
+        await send_welcome(message)
+
+    @dp.message(Command("full_info"))
+    @dp.callback_query(F.data == "full_info")
+    @check_user
+    async def full_info_handler(update: Message | CallbackQuery, state: FSMContext = None):
+        """Handles the /full_info command or full_info callback query by sending detailed user information."""
+        await send_full_info(update)
+
+    @dp.message(Command("changelang"))
+    @check_user
+    async def changelang_handler(message: Message, state: FSMContext = None):
+        """Handles the /changelang command by initiating the language change process."""
+        await send_change_lang(message)
+
+    @dp.callback_query(F.data.startswith("lang:"))
+    @check_user
+    async def lang_change_handler(callback: CallbackQuery, state: FSMContext = None):
+        """Handles callback queries for language selection, updating the user's language preference."""
+        await handle_lang_change(callback)

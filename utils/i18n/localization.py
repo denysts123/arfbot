@@ -2,7 +2,7 @@
 from pathlib import Path
 from typing import Dict, Any
 
-from utils import logger
+from utils.logging import logger
 from db.database import Database
 
 db = Database()
@@ -24,7 +24,6 @@ logger.info(f"Loaded {loaded_count} localizations.")
 if loaded_count == 0:
     logger.warning("No localizations were loaded. Check the loc directory.")
 
-# Cache for user languages to avoid repeated DB queries
 user_lang_cache: Dict[int, str] = {}
 
 def _get_value(lang: str, keys: list[str]) -> str:
@@ -45,7 +44,7 @@ def _get_value(lang: str, keys: list[str]) -> str:
             return '.'.join(keys)
 
 async def tr(user_id: int, key: str) -> str:
-    """Translate a key for the user's language, using cached language if available."""
+    """Translates a given key into the user's preferred language, retrieving the language from cache or database if necessary, with fallback to English."""
     if user_id not in user_lang_cache:
         try:
             user = await db.get_user(user_id)
@@ -65,11 +64,11 @@ async def tr(user_id: int, key: str) -> str:
     return _get_value(lang, keys)
 
 def update_user_lang_cache(user_id: int, lang: str):
-    """Update the cached language for a user."""
+    """Updates the in-memory cache with the new language preference for the specified user."""
     user_lang_cache[user_id] = lang
 
 def get_translation(lang: str, key: str) -> str:
-    """Get translation for a specific language."""
+    """Retrieves the translation for a specific key in the given language, falling back to English if the language is not available."""
     if lang not in locales:
         lang = 'en_US'
     
