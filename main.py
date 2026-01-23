@@ -9,36 +9,29 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from utils.logging import logger
-from utils.bootstrap_dir import bootstrap
 from handlers.commands import setup_handlers
+from utils.bootstrap_dir import bootstrap
+from utils.logging import logger
 
-env_path = Path(__file__).parent / '.env'
-load_dotenv(dotenv_path=env_path)
-
-BOT_TOKEN = getenv("BOT_TOKEN")
-
+load_dotenv(dotenv_path=Path(__file__).parent / '.env')
 
 dp = Dispatcher()
-
 setup_handlers(dp)
 
 
 async def start_bot() -> None:
     """Starts the bot by establishing a connection, verifying bot credentials, logging essential information, and initiating the polling loop for handling updates."""
     logger.info("Starting bot...")
-    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot = Bot(token=getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     try:
-        await bot.get_me()
+        bot_info = await bot.get_me()
     except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e:
         logger.critical(f"Can't start bot: {e}")
-        if bot:
-            await bot.session.close()
+        await bot.session.close()
         sys.exit(1)
     else:
         logger.info("Bot successfully started.")
         logger.info("Bot information:")
-        bot_info = await bot.get_me()
         logger.info(f"Username: @{bot_info.username}")
         logger.info(f"ID: {bot_info.id}")
         await dp.start_polling(bot)

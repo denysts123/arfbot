@@ -7,21 +7,26 @@ import zipfile
 from datetime import datetime, timedelta
 from loguru import logger
 
-load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 LOGS_DIR = os.getenv("LOGS_DIR")
 LOG_FILE_NAME = os.getenv("LOG_FILE_NAME")
 RETENTION_DAYS_RAW = os.getenv("RETENTION_DAYS")
 
 try:
+    if RETENTION_DAYS_RAW is None:
+        raise ValueError("RETENTION_DAYS environment variable is not set")
     RETENTION_DAYS = int(RETENTION_DAYS_RAW)
     if RETENTION_DAYS < 0:
-        raise ValueError("negative")
-except Exception:
-    logger.critical("RETENTION_DAYS must be a non-negative integer")
+        raise ValueError(f"RETENTION_DAYS must be non-negative, got {RETENTION_DAYS}")
+except ValueError as e:
+    logger.critical(f"Invalid RETENTION_DAYS: {e}")
+    sys.exit(1)
+except Exception as e:
+    logger.critical(f"Unexpected error parsing RETENTION_DAYS: {e}")
     sys.exit(1)
 
-base_dir = Path(__file__).parent
+base_dir = Path(__file__).parent.parent.parent
 if not Path(LOGS_DIR).is_absolute():
     LOGS_DIR = (base_dir / LOGS_DIR).resolve()
 

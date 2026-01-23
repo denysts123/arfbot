@@ -1,17 +1,17 @@
 ﻿from functools import wraps
 from typing import Callable
 
-from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
+from aiogram.fsm.context import FSMContext
 
 from utils.logging import logger
-from utils.user import get_user, is_banned as is_banned_func, get_ban_date
+from utils.user import get_user, is_banned, get_ban_date
 from utils.i18n import tr, get_translation
 from handlers.registration import RegistrationStates, get_lang_from_code
 
 
 def check_user(func: Callable) -> Callable:
-    """Decorator to check if a user exists and is not banned before executing the handler."""
+    """Decorator to check if a user exists and is not banned before executing the handler, handling registration if needed."""
 
     @wraps(func)
     async def wrapper(update, state: FSMContext = None):
@@ -26,7 +26,7 @@ def check_user(func: Callable) -> Callable:
             text = get_translation(lang, 'messages.select_name')
             await update.answer(text)
             return None
-        if await is_banned_func(user_id):
+        if await is_banned(user_id):
             logger.warning(f"User {user_id} is banned, blocking access.")
             ban_date = await get_ban_date(user_id)
             banned_msg = await tr(user_id, 'messages.banned')
