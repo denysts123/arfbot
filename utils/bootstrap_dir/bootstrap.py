@@ -5,12 +5,12 @@ This module performs essential system checks before the main application starts.
 It verifies dependencies, environment variables, and database structure.
 """
 
+import asyncio
 import os
 import sys
 import sqlite3
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from importlib.metadata import version, PackageNotFoundError
-import asyncio
 
 PKGS = ["aiogram", "aiosqlite", "loguru", "python-dotenv"]
 VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS", "ADMIN_IDS", "LOG_LEVEL"]
@@ -87,7 +87,7 @@ def check_and_get_db_info(db_path):
         msg = f"Database file does not exist: {db_path}"
         return [msg], msg
     
-    base_dir = Path(__file__).parent.parent
+    base_dir = Path(__file__).parent.parent.parent
     init_sql_path = base_dir / "db" / "init.sql"
     if not init_sql_path.exists():
         msg = f"init.sql file not found: {init_sql_path}"
