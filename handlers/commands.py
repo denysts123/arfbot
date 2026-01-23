@@ -2,8 +2,10 @@
 from aiogram import F
 from aiogram.types import Message, CallbackQuery
 
+from os import getenv
+from db.database import Database
 from utils.logging import logger
-from utils.user import get_user, get_full_stats, change_user_lang
+from utils.user import get_user, get_full_stats, change_user_lang, is_banned
 from utils.i18n import tr
 from utils.formatters import format_welcome_message, format_full_info_message
 from utils.auth import check_user
@@ -13,11 +15,26 @@ from handlers.registration import RegistrationStates, process_name
 from game.penalty import play_penalty, check_penalty_access
 from game.matches import play_match
 
+db = Database()
+
 
 async def send_welcome(message: Message):
     """Handle the /start command by retrieving user data, formatting a welcome message with user info
     and commands list, and sending it."""
     user_id = message.from_user.id
+    args = message.text.split()[1] if len(message.text.split()) > 1 else None
+    if args and args.isdigit():
+        referrer_id = int(args)
+        if referrer_id != user_id:
+            # Check if referrer exists and not banned
+            referrer_data = await get_user(referrer_id)
+            if referrer_data and not await is_banned(referrer_id):
+                # Award referrer 40000 coins
+                await db.execute_update("UPDATE users SET Coins = Coins + 40000, ReceivedCoins = ReceivedCoins + 40000 WHERE UserId = ?", (referrer_id,))
+                # Increment referrals count
+                await db.execute_update("UPDATE users SET ReferralsCount = ReferralsCount + 1 WHERE UserId = ?", (referrer_id,))
+                logger.info(f"Referred user {user_id} by {referrer_id}, awarded 40000 coins.")
+    
     logger.debug(f"Handling /start command for user {user_id}.")
     user_data = await get_user(user_id)
     logger.debug(f"Sending welcome message to user {user_id}.")
@@ -106,6 +123,18 @@ def setup_handlers(dp):
     async def stats_cmd_handler(message: Message, state = None):
         """Handle /stats command by sending full user info."""
         await send_full_info(message)
+
+    @dp.message(Command("referral"))
+    @check_user
+    async def referral_cmd_handler(message: Message, state = None):
+        """Handle /referral command by showing referral link and stats."""
+        user_id = message.from_user.id
+        user_data = await get_user(user_id)
+        referrals_count = user_data[REFERRALS_COUNT]
+        referral_link = f"https://t.me/{getenv('BOT_USERNAME')}?start={user_id}"
+        text = await tr(user_id, 'messages.referral_info')
+        text = text.format(link=referral_link, count=referrals_count)
+        await message.answer(text)
 
     @dp.callback_query(F.data.startswith("lang:"))
     @check_user

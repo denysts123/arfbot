@@ -164,3 +164,4 @@ messages:
   no_opponents: "Žádní dostupní soupeři!"
   opponent_search_error: "Chyba vyhledávání soupeře!"
   play_button: "Hrát"
+  referral_info: "Váš referenční odkaz: {link}\nPozvaní referenti: {count}\nZískejte 40000 mincí za každého referenta!"
