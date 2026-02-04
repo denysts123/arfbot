@@ -10,10 +10,12 @@ from utils.i18n import tr
 from utils.formatters import format_welcome_message, format_full_info_message
 from utils.auth import check_user
 from utils.keyboards import (create_games_markup, create_play_button_markup,
-                             create_lang_selection_markup, create_games_and_events_markup)
+                             create_lang_selection_markup, create_games_and_events_markup,
+                             create_main_menu_markup)
 from handlers.registration import RegistrationStates, process_name
 from game.penalty import play_penalty, check_penalty_access
 from game.matches import play_match
+from utils.user_fields import REFERRALS_COUNT
 
 db = Database()
 
@@ -39,8 +41,7 @@ async def send_welcome(message: Message):
     user_data = await get_user(user_id)
     logger.debug(f"Sending welcome message to user {user_id}.")
     text = await format_welcome_message(user_id, user_data)
-    commands_text = await tr(user_id, 'messages.commands_list')
-    await message.answer(text + "\n\n" + commands_text)
+    await message.answer(text, reply_markup=await create_main_menu_markup(user_id))
 
 
 async def send_full_info(update: Message | CallbackQuery):
@@ -209,3 +210,22 @@ def setup_handlers(dp):
             return
         await callback.message.answer(match_data["start_msg"])
         await callback.message.answer(match_data["result"])
+
+    @dp.callback_query(F.data == "referral")
+    @check_user
+    async def referral_callback_handler(callback: CallbackQuery, state = None):
+        """Handle referral callback by showing referral link and stats."""
+        user_id = callback.from_user.id
+        user_data = await get_user(user_id)
+        referrals_count = user_data[REFERRALS_COUNT]
+        referral_link = f"https://t.me/{getenv('BOT_USERNAME')}?start={user_id}"
+        text = await tr(user_id, 'messages.referral_info')
+        text = text.format(link=referral_link, count=referrals_count)
+        await callback.answer()
+        await callback.message.answer(text)
+
+    @dp.callback_query(F.data == "changelang")
+    @check_user
+    async def changelang_callback_handler(callback: CallbackQuery, state = None):
+        """Handle changelang callback by showing language selection."""
+        await send_change_lang(callback.message)

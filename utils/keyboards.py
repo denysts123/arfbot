@@ -38,3 +38,17 @@ async def create_games_and_events_markup(user_id: int) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text=games_text, callback_data='games')],
         [InlineKeyboardButton(text=events_text, callback_data='events')]
     ])
+
+
+async def create_main_menu_markup(user_id: int) -> InlineKeyboardMarkup:
+    """Create inline keyboard for main menu navigation with translated buttons."""
+    games_text = await tr(user_id, 'messages.games')
+    stats_text = await tr(user_id, 'messages.stats')
+    referral_text = await tr(user_id, 'messages.referral')
+    changelang_text = await tr(user_id, 'messages.changelang')
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=games_text, callback_data='games')],
+        [InlineKeyboardButton(text=stats_text, callback_data='full_info')],
+        [InlineKeyboardButton(text=referral_text, callback_data='referral')],
+        [InlineKeyboardButton(text=changelang_text, callback_data='changelang')]
+    ])

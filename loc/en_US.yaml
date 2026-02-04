@@ -165,3 +165,6 @@ messages:
   opponent_search_error: "Opponent search error!"
   play_button: "Play"
   referral_info: "Your referral link: {link}\nReferrals invited: {count}\nEarn 40000 coins per referral!"
+  stats: "Statistics"
+  referral: "Referral"
+  changelang: "Change Language"

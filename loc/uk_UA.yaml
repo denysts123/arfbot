@@ -165,3 +165,6 @@ messages:
   opponent_search_error: "Помилка пошуку опонента!"
   play_button: "Грати"
   referral_info: "Ваше реферальне посилання: {link}\nЗапрошених рефералів: {count}\nЗаробляйте 40000 монет за кожного реферала!"
+  stats: "Статистика"
+  referral: "Реферали"
+  changelang: "Змінити мову"

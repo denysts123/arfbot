@@ -8,6 +8,7 @@ import aiogram.exceptions
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.types import BotCommand
 
 from handlers.commands import setup_handlers
 from utils.bootstrap_dir import bootstrap
@@ -23,6 +24,18 @@ async def start_bot() -> None:
     """Starts the bot by establishing a connection, verifying bot credentials, logging essential information, and initiating the polling loop for handling updates."""
     logger.info("Starting bot...")
     bot = Bot(token=getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    
+    # Set bot commands
+    commands = [
+        BotCommand(command="start", description="Start the bot and show main menu"),
+        BotCommand(command="full_info", description="View detailed statistics"),
+        BotCommand(command="changelang", description="Change language"),
+        BotCommand(command="games", description="Access games section"),
+        BotCommand(command="stats", description="View statistics"),
+        BotCommand(command="referral", description="Referral system"),
+    ]
+    await bot.set_my_commands(commands)
+    
     try:
         bot_info = await bot.get_me()
     except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e:

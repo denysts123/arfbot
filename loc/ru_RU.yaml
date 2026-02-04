@@ -165,3 +165,6 @@ messages:
   opponent_search_error: "Ошибка поиска оппонента!"
   play_button: "Играть"
   referral_info: "Ваша реферальная ссылка: {link}\nПриглашенных рефералов: {count}\nЗарабатывайте 40000 монет за каждого реферала!"
+  stats: "Статистика"
+  referral: "Рефералы"
+  changelang: "Изменить язык"
