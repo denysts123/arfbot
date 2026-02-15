@@ -2,7 +2,6 @@
 *.env
 __pycache__/
 *.pyc
-TODO.md
 .DS_Store
 .vscode/
 .idea/
