@@ -1,0 +1,172 @@
+﻿config:
+  loc_name: "Español"
+  loc_flag: "🇪🇸"
+messages:
+  welcome: |
+    👤 ID: {user_id}
+    📝 Nombre: {username}
+    💰 Monedas: {coins}
+    🎫 Entradas: {tickets}
+    🏆 Copas: {cups}
+    ℹ️ Sobre el jugador:
+    {user_info}
+  full_info: |
+    📊 Estadísticas del jugador "{username}"
+    💰 Monedas: {coins}
+    🎫 Entradas: {tickets}
+    🏆 Copas: {cups}
+
+    💸 Total de monedas recibidas: {received_coins}
+    🎟️ Total de entradas recibidas: {received_tickets}
+    ⚽ Total de partidos jugados: {games_played}
+    De los cuales has:
+    ✅ Ganado {victories} veces ({win_rate:.2f}%)
+    ❌ Perdido {defeats} veces
+    🤝 Empatado {draws} veces
+    📦 Packs abiertos:
+    📦 {small_packs} pequeños
+    📦 {medium_packs} medianos
+    📦 {big_packs} grandes
+    👥 Personas invitadas vía referido: {referrals}
+    📅 Fecha de registro: {register_date}
+
+    ⚠️ Ten en cuenta que algunos recursos no se cuentan si fueron emitidos por administradores (fantasma):
+    👻 Packs pequeños fantasma: {ghost_small}
+    👻 Packs medianos fantasma: {ghost_medium}
+    👻 Packs grandes fantasma: {ghost_big}
+    👻 Éxito no contabilizado: {ghost_success}
+
+
+    🌟 Tu éxito total: {success}
+    🏅 Estás en el puesto {position} del top del bot
+    👑 Tu rango: {rank}
+    ⭐ Nivel FP: {fp_level}N/A (próximamente)
+  banned: "🚫 Estás baneado y no puedes usar este bot.\n📅 Fecha de fin del baneo: {ban_date}"
+  user_not_found: "❌ Usuario no encontrado."
+  select_lang: "🌐 Selecciona tu idioma:"
+  lang_changed: "✅ ¡Idioma cambiado con éxito!"
+  select_name: "👋 Por favor, introduce tu nombre para el registro:"
+  name_empty: "⚠️ El nombre no puede estar vacío. Por favor, introduce tu nombre:"
+  games_and_events: "🎮 Elige una sección:"
+  games: "🎮 Juegos"
+  events: "🎉 Eventos"
+  penalty: "⚽ Tanda de Penaltis"
+  penalty_start: "⚽ ¡Tanda de penaltis! Necesitas 25000 de éxito para jugar."
+  penalty_result: "⚽ Goles: {goals}/5\n💰 Recompensa: {reward} monedas\n🎯 Intentos restantes: {left}"
+  matches: "⚽ Partidos"
+  match_start: "⚽ Partido contra {opponent} ({success})"
+  match_win: "🎉 Ganaste {score1}:{score2}\n💰 +11000 monedas\n🏆 +10 copas!"
+  match_lose: "😔 Perdiste {score1}:{score2}\n❌ Razón: {reason}"
+  match_draw: "🤝 Empate {score1}:{score2}"
+  loss_reasons:
+    - "El árbitro fue injusto"
+    - "Estabas de mal humor"
+    - "No jugaron como un equipo"
+    - "Falta de experiencia"
+    - "Mala salud"
+    - "Poca concentración"
+    - "Circunstancias desafortunadas"
+    - "El oponente era más fuerte"
+    - "Mala elección de táctica"
+    - "Fallaste en el momento decisivo"
+    - "Demasiado cansancio"
+    - "Mala suerte"
+    - "Lesión"
+    - "Mala comunicación en el equipo"
+    - "Elección incorrecta de la alineación"
+    - "Seguiste la táctica demasiado estrictamente sin considerar al rival"
+    - "Algunos jugadores no soportaron la carga"
+    - "Te rendiste demasiado rápido tras encajar un gol"
+    - "Falta de sueño la noche anterior"
+    - "El oponente usó técnicas prohibidas"
+    - "Motivación insuficiente en el equipo"
+    - "Sin química entre los jugadores"
+    - "El oponente fue más creativo e inventivo"
+    - "No pudiste adaptarte al estilo de juego del rival"
+    - "Demasiada presión sobre los jugadores"
+    - "Falta de tiempo para preparar el partido"
+    - "Falta de concentración total en el juego"
+    - "Momento equivocado para el ataque"
+    - "Falta de práctica de juego"
+    - "El oponente es más técnico y habilidoso"
+    - "Demasiados errores en el juego"
+    - "El rival estaba más motivado y deseaba más la victoria"
+    - "Falta de entendimiento mutuo en el equipo"
+    - "Tomaste una mala decisión en el momento decisivo"
+    - "El oponente usó tácticas inesperadas"
+    - "Falta de coordinación en el equipo"
+    - "Malas condiciones climáticas"
+    - "Problemas con el equipamiento"
+    - "El oponente jugó de forma muy agresiva"
+    - "Falta de confianza en tus habilidades"
+    - "El rival usó tácticas más efectivas"
+    - "Mala elección de equipo"
+    - "Resistencia insuficiente"
+    - "Mala elección de nutrición"
+    - "El rival tuvo más apoyo de la afición"
+    - "Entendimiento insuficiente de las reglas"
+    - "Pobre control de las emociones"
+    - "El oponente es demasiado rápido y ágil"
+    - "Fuiste demasiado defensivo tras el inicio"
+    - "Juzgaste mal las capacidades de tu equipo"
+    - "Conocimiento insuficiente de táctica y estrategia"
+    - "Baja forma antes del partido"
+    - "El oponente usó astucia y engaño durante el juego"
+    - "Entrenamiento ineficaz antes del partido"
+    - "Mala elección de compañeros de juego"
+    - "Falta de experiencia en partidos de alto nivel"
+    - "Errores en la preparación del partido"
+    - "Incapacidad para adaptarse a las condiciones cambiantes"
+    - "Mala motivación del entrenador"
+    - "Estabas nervioso y no pudiste relajarte"
+    - "El rival estaba mejor preparado físicamente"
+    - "Tácticas de defensa ineficaces"
+    - "Sistema de juego en equipo poco establecido"
+    - "Táctica errónea para un oponente específico"
+    - "El rival usó trucos tácticos más sutiles"
+    - "Falta de apoyo de los fans"
+    - "Malestar físico el día del partido"
+    - "Subestimaste la fuerza del rival"
+    - "Demasiadas distracciones fuera del campo"
+    - "Gestión ineficaz de la alineación"
+    - "No pudiste adaptarte al ritmo del juego"
+    - "El rival estaba mejor preparado psicológicamente"
+    - "Falta de intuición entre los miembros del equipo"
+    - "Sentiste dolor físico o incomodidad durante el juego"
+    - "Falta de ayuda profesional en el desarrollo táctico"
+    - "El rival conocía demasiado bien tus puntos débiles"
+    - "Fuiste demasiado predecible en tu juego"
+    - "Tácticas de ataque ineficaces"
+    - "El oponente ha jugado más tiempo como equipo"
+    - "Mucho tiempo pensando en fracasos anteriores"
+    - "Poco tiempo dedicado a los aspectos técnicos"
+    - "Mal momento para realizar cambios"
+    - "Falta de disciplina en el equipo"
+    - "No seguiste tu estrategia"
+    - "El rival se preparó mejor para este partido específico"
+    - "El rival usó maniobras más sutiles"
+    - "El oponente empezó muy fuerte y marcó el ritmo"
+    - "El equipo no tiene suficiente experiencia general"
+    - "Factores externos (clima/campo) afectaron tu juego"
+    - "El entrenador rival tenía más experiencia"
+    - "El rival usa métodos de entrenamiento innovadores"
+    - "Mala distribución de roles en el equipo"
+    - "Falta de preparación mental"
+    - "Líder demasiado débil o ineficaz"
+    - "Falta de versatilidad en la alineación"
+    - "El rival usó una defensa férrea que impidió tus goles"
+  commands_list: "📋 Comandos disponibles:\n🎮 /games - Jugar\n📊 /stats - Ver estadísticas\n👤 /profile - Ajustes de perfil\n🛒 /shop - Tienda\n👥 /referral - Sistema de referidos\n🌐 /changelang - Cambiar idioma"
+  no_attempts_left: "❌ ¡No te quedan intentos!"
+  match_started: "⚽ El partido ha comenzado"
+  wait_15_seconds: "⏳ Partido iniciado, espera 15 segundos..."
+  match_requirements: "💰 Para jugar un partido necesitas 5000 monedas y 1 entrada"
+  insufficient_resources: "❌ ¡Recursos insuficientes!"
+  no_opponents: "❌ ¡No hay oponentes disponibles!"
+  opponent_search_error: "❌ ¡Error al buscar oponente!"
+  play_button: "▶️ Jugar"
+  referral_info: "🎁 Tu enlace de referido:\n{link}\n\n👥 Referidos invitados: {count}\n💰 ¡Gana 40000 monedas por cada referido!"
+  share_referral: "📤 Compartir enlace"
+  copy_link: "📋 Copiar enlace"
+  stats: "📊 Estadísticas"
+  referral: "👥 Referidos"
+  changelang: "🌐 Cambiar idioma"
