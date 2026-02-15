@@ -1,6 +1,6 @@
 ﻿"""
 Localization module.
-Provides translation functions with English as default (localization temporarily frozen).
+Provides translation functions with user language caching.
 """
 import yaml
 from pathlib import Path
@@ -10,6 +10,7 @@ from utils.logging import logger
 
 LOC_DIR = Path(__file__).parent.parent.parent / "loc"
 locales: Dict[str, Dict[str, Any]] = {}
+user_lang_cache: Dict[int, str] = {}
 
 for loc_file in LOC_DIR.glob("*.yaml"):
     lang_code = loc_file.stem
@@ -40,12 +41,28 @@ def _get_value(lang: str, keys: list[str]) -> str:
     return '.'.join(keys)
 
 
+async def get_user_lang(user_id: int) -> str:
+    """
+    Get user's language from cache or database.
+    Falls back to en_US if not found.
+    """
+    if user_id in user_lang_cache:
+        return user_lang_cache[user_id]
+    
+    from db.database import Database
+    db = Database()
+    lang = await db.get_user_lang(user_id) or 'en_US'
+    
+    if lang not in locales:
+        lang = 'en_US'
+    
+    user_lang_cache[user_id] = lang
+    return lang
+
+
 async def tr(user_id: int, key: str) -> str:
-    """
-    Translate a key for the given user.
-    Currently frozen to English (en_US).
-    """
-    lang = 'en_US'
+    """Translate a key for the given user based on their language preference."""
+    lang = await get_user_lang(user_id)
     keys = key.split('.')
     return _get_value(lang, keys)
 
@@ -61,9 +78,13 @@ def get_translation(lang: str, key: str) -> str:
     return _get_value(lang, keys)
 
 
-def get_loss_reasons(user_id: int) -> list[str]:
-    """
-    Get the list of loss reasons.
-    Currently frozen to English (en_US).
-    """
-    return locales.get('en_US', {}).get('messages', {}).get('loss_reasons', [])
+def update_user_lang_cache(user_id: int, lang: str) -> None:
+    """Update the language cache for a user."""
+    user_lang_cache[user_id] = lang
+
+
+async def get_loss_reasons(user_id: int) -> list[str]:
+    """Get the list of loss reasons in user's language."""
+    lang = await get_user_lang(user_id)
+    return locales.get(lang, {}).get('messages', {}).get('loss_reasons', [])
+

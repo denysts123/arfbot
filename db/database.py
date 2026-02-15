@@ -69,6 +69,11 @@ class Database:
         result = await self._execute("SELECT BanEnd FROM Users WHERE UserId = ?", (user_id,), fetch="one")
         return result[0] if result else None
 
+    async def get_user_lang(self, user_id: int) -> Optional[str]:
+        """Retrieve the language preference for a user."""
+        result = await self._execute("SELECT Lang FROM Users WHERE UserId = ?", (user_id,), fetch="one")
+        return result[0] if result else None
+
     async def create_user(self, user_id: int, username: str, lang: str) -> None:
         """Create a new user in the database."""
         logger.info(f"Creating new user {user_id} with username '{username}'")

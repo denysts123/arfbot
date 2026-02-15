@@ -59,7 +59,7 @@ async def play_match(user_id: int) -> dict:
         await db.log_action(user_id, "match_win", constants.MATCH_WIN_COINS_REWARD, f"Won {player1_score}:{player2_score}")
 
     elif player1_score < player2_score:
-        loss_reasons = get_loss_reasons(user_id)
+        loss_reasons = await get_loss_reasons(user_id)
         reason = random.choice(loss_reasons) if loss_reasons else "Bad luck"
         await db.update_user(
             "UPDATE Users SET Defeats = Defeats + 1, GamesPlayed = GamesPlayed + 1 WHERE UserId = ?",

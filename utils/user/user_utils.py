@@ -71,5 +71,7 @@ async def get_full_stats(user_id: int) -> dict | None:
 
 
 async def change_user_lang(user_id: int, lang: str) -> None:
-    """Change the user's language preference."""
+    """Change the user's language preference and update cache."""
     await db.update_user_lang(user_id, lang)
+    from utils.i18n import update_user_lang_cache
+    update_user_lang_cache(user_id, lang)
