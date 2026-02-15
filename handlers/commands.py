@@ -7,11 +7,12 @@ from aiogram import F
 from aiogram.types import Message, CallbackQuery
 
 from db.database import Database
-from utils.logging import logger
-from utils.user import get_user, get_full_stats, change_user_lang, is_banned
-from utils.i18n import tr
+from core.logger import logger
+from core.i18n import tr
+from core.config import REFERRALS_COUNT
+from utils.user import get_user, get_full_stats, change_user_lang
 from utils.formatters import format_welcome_message, format_full_info_message
-from utils.auth import check_user
+from utils.decorators import check_user
 from utils.keyboards import (
     create_games_markup, create_play_button_markup,
     create_lang_selection_markup, create_games_and_events_markup,
@@ -20,7 +21,6 @@ from utils.keyboards import (
 from handlers.registration import RegistrationStates, process_name
 from game.penalty import play_penalty, check_penalty_access
 from game.matches import play_match
-from utils.user_fields import REFERRALS_COUNT
 
 db = Database()
 

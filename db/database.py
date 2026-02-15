@@ -8,7 +8,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import aiosqlite
 
-from utils.logging import logger
+from core.logger import logger
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
 

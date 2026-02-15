@@ -6,9 +6,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
+from core.logger import logger
+from core.i18n import get_translation
 from utils.formatters import format_welcome_message
-from utils.i18n import get_translation
-from utils.logging import logger
 from utils.user import create_user, get_user
 from utils.keyboards import create_main_menu_markup
 

@@ -1,5 +1,5 @@
 config:
-  loc_name: "Русский"
+  loc_name: "Русский (RU)"
   loc_flag: "🇷🇺"
 messages:
   welcome: |

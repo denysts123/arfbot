@@ -2,7 +2,6 @@
 Main entry point for the Telegram bot application.
 Initializes the bot, sets up handlers, and starts polling.
 """
-
 import asyncio
 import sys
 from os import getenv
@@ -16,8 +15,8 @@ from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 from handlers.commands import setup_handlers
-from utils.bootstrap_dir import bootstrap
-from utils.logging import logger
+from core.bootstrap import bootstrap
+from core.logger import logger
 
 load_dotenv(dotenv_path=Path(__file__).parent / '.env')
 

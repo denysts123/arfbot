@@ -1,5 +1,5 @@
 ﻿config:
-  loc_name: "Español"
+  loc_name: "Español (ES)"
   loc_flag: "🇪🇸"
 messages:
   welcome: |

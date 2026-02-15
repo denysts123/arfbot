@@ -2,10 +2,9 @@
 Keyboard utilities module.
 Provides functions for creating inline keyboards.
 """
-
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from utils.i18n import tr, locales, get_available_locales
+from core.i18n import tr, locales, get_available_locales
 
 
 async def create_games_markup(user_id: int) -> InlineKeyboardMarkup:
@@ -61,14 +60,7 @@ async def create_referral_markup(user_id: int, referral_link: str) -> InlineKeyb
     copy_text = await tr(user_id, 'messages.copy_link')
     
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(
-            text=share_text,
-            url=f"https://t.me/share/url?url={referral_link}"
-        )],
-        [InlineKeyboardButton(
-            text=copy_text,
-            url=referral_link
-        )]
+        [InlineKeyboardButton(text=share_text, url=f"https://t.me/share/url?url={referral_link}")],
+        [InlineKeyboardButton(text=copy_text, url=referral_link)]
     ])
-
 

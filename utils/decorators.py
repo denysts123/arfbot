@@ -2,16 +2,15 @@
 Authentication decorators module.
 Provides decorators for user validation before handler execution.
 """
-
 from functools import wraps
 from typing import Callable
 
 from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-from utils.logging import logger
+from core.logger import logger
+from core.i18n import tr, get_translation
 from utils.user import get_user, is_banned, get_ban_date
-from utils.i18n import tr, get_translation
 from handlers.registration import RegistrationStates
 
 
@@ -21,7 +20,6 @@ def check_user(func: Callable) -> Callable:
     Starts registration flow if user not found.
     Extracts referral parameter from /start command if present.
     """
-
     @wraps(func)
     async def wrapper(update, state: FSMContext = None):
         user_id = update.from_user.id
@@ -68,3 +66,4 @@ def check_user(func: Callable) -> Callable:
         return await func(update, state)
 
     return wrapper
+

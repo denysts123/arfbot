@@ -2,9 +2,13 @@
 Text formatters module.
 Provides functions for formatting user-facing messages.
 """
-
-from utils.i18n import tr
-from utils.user_fields import *
+from core.i18n import tr
+from core.config import (
+    USER_ID, USERNAME, COINS, TICKETS, CUPS, USER_INFO,
+    RECEIVED_COINS, RECEIVED_TICKETS, GAMES_PLAYED, VICTORIES, DEFEATS,
+    SMALL_PACKS, MEDIUM_PACKS, BIG_PACKS, REFERRALS_COUNT, REGISTER_DATE,
+    GHOST_SMALL_PACKS, GHOST_MEDIUM_PACKS, GHOST_BIG_PACKS
+)
 
 
 async def format_welcome_message(user_id: int, user_data: tuple) -> str:
@@ -52,3 +56,4 @@ async def format_full_info_message(user_id: int, stats: dict) -> str:
         rank=None,
         fp_level=None
     )
+

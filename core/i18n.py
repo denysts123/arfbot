@@ -7,10 +7,10 @@ import yaml
 from pathlib import Path
 from typing import Any
 
-from utils.logging import logger
+from core.logger import logger
 
 DEFAULT_LANG = "en_US"
-LOC_DIR = Path(__file__).parent.parent.parent / "loc"
+LOC_DIR = Path(__file__).parent.parent / "loc"
 locales: dict[str, dict[str, Any]] = {}
 user_lang_cache: dict[int, str] = {}
 
