@@ -34,7 +34,7 @@ async def process_name(message: Message, state: FSMContext):
     if not name:
         lang_code = message.from_user.language_code
         lang = get_lang_from_code(lang_code)
-        text = get_translation(lang, 'messages.name_empty')
+        text = get_translation('en_US', 'messages.name_empty')
         await message.answer(text)
         return
     logger.debug(f"Received name '{name}' for user {user_id}.")
@@ -44,6 +44,8 @@ async def process_name(message: Message, state: FSMContext):
     
     await create_user(user_id, name, lang)
     await state.clear()
+    
+    logger.info(f"User {user_id} registered with name '{name}'.")
     
     user_data = await get_user(user_id)
     text = await format_welcome_message(user_id, user_data)

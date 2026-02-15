@@ -23,7 +23,7 @@ def check_user(func: Callable) -> Callable:
             await state.set_state(RegistrationStates.waiting_for_name)
             lang_code = update.from_user.language_code
             lang = get_lang_from_code(lang_code)
-            text = get_translation(lang, 'messages.select_name')
+            text = get_translation('en_US', 'messages.select_name')
             await update.answer(text)
             return None
         if await is_banned(user_id):

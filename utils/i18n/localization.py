@@ -61,20 +61,22 @@ async def tr(user_id: int, key: str) -> str:
     Returns:
         str: The translated string.
     """
-    if user_id not in user_lang_cache:
-        try:
-            user = await db.get_user(user_id)
-            lang = user[30] if user and len(user) > 30 else 'en_US'
-            user_lang_cache[user_id] = lang
-        except Exception as e:
-            logger.error(f"Error getting user lang for {user_id}: {e}")
-            lang = 'en_US'
-            user_lang_cache[user_id] = lang
-    else:
-        lang = user_lang_cache[user_id]
+    # Temporarily disabled localization, always use English
+    lang = 'en_US'
+    # if user_id not in user_lang_cache:
+    #     try:
+    #         user = await db.get_user(user_id)
+    #         lang = user[30] if user and len(user) > 30 else 'en_US'
+    #         user_lang_cache[user_id] = lang
+    #     except Exception as e:
+    #         logger.error(f"Error getting user lang for {user_id}: {e}")
+    #         lang = 'en_US'
+    #         user_lang_cache[user_id] = lang
+    # else:
+    #     lang = user_lang_cache[user_id]
 
-    if lang not in locales:
-        lang = 'en_US'
+    # if lang not in locales:
+    #     lang = 'en_US'
 
     keys = key.split('.')
     return _get_value(lang, keys)
@@ -117,7 +119,9 @@ def get_loss_reasons(user_id: int) -> list[str]:
     Returns:
         list[str]: The list of loss reasons in the user's language.
     """
-    lang = user_lang_cache.get(user_id, 'en_US')
-    if lang not in locales:
-        lang = 'en_US'
+    # Temporarily disabled localization, always use English
+    lang = 'en_US'
+    # lang = user_lang_cache.get(user_id, 'en_US')
+    # if lang not in locales:
+    #     lang = 'en_US'
     return locales[lang]['messages']['loss_reasons']

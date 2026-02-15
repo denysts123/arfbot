@@ -12,7 +12,7 @@ import sqlite3
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-PKGS = ["aiogram", "aiosqlite", "loguru", "python-dotenv"]
+PKGS = ["aiogram", "aiosqlite", "loguru", "python-dotenv", "pyyaml"]
 VARS = ["BOT_TOKEN", "DB_PATH", "LOGS_DIR", "LOG_FILE_NAME", "RETENTION_DAYS", "ADMIN_IDS", "LOG_LEVEL"]
 
 RED = '\033[31m'

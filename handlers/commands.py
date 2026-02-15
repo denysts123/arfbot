@@ -104,6 +104,7 @@ async def handle_lang_change(callback: CallbackQuery):
 async def send_games_menu(update: Message | CallbackQuery):
     """Send games menu with title and markup."""
     user_id = update.from_user.id
+    logger.info(f"User {user_id} opened games menu.")
     markup = await create_games_markup(user_id)
     title = await tr(user_id, 'messages.games')
     if isinstance(update, CallbackQuery):
@@ -116,6 +117,7 @@ async def send_games_menu(update: Message | CallbackQuery):
 async def send_games_and_events_menu(callback: CallbackQuery):
     """Send games and events menu with title and markup."""
     user_id = callback.from_user.id
+    logger.info(f"User {user_id} opened games and events menu.")
     markup = await create_games_and_events_markup(user_id)
     title = await tr(user_id, 'messages.games_and_events')
     await callback.answer(title)
@@ -129,6 +131,7 @@ async def send_penalty_menu(callback: CallbackQuery):
         msg = await tr(user_id, 'messages.penalty_start')
         await callback.answer(msg, show_alert=True)
         return
+    logger.info(f"User {user_id} opened penalty menu.")
     msg = await tr(user_id, 'messages.penalty')
     await callback.answer(msg)
     markup = await create_play_button_markup(user_id, "play_penalty")
@@ -138,6 +141,7 @@ async def send_penalty_menu(callback: CallbackQuery):
 async def send_matches_menu(callback: CallbackQuery):
     """Send matches menu with requirements and play button."""
     user_id = callback.from_user.id
+    logger.info(f"User {user_id} opened matches menu.")
     markup = await create_play_button_markup(user_id, "play_match")
     await callback.answer(await tr(user_id, 'messages.matches'))
     req_msg = await tr(user_id, 'messages.match_requirements')
@@ -147,6 +151,7 @@ async def send_matches_menu(callback: CallbackQuery):
 async def play_game(callback: CallbackQuery, game_func):
     """Play a game by calling game_func and sending start and result messages."""
     user_id = callback.from_user.id
+    logger.info(f"User {user_id} played {game_func.__name__}.")
     game_data = await game_func(user_id)
     if "error" in game_data:
         await callback.message.answer(game_data["error"])
