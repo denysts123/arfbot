@@ -30,7 +30,8 @@ def get_lang_from_code(lang_code: str) -> str:
 async def process_name(message: Message, state: FSMContext):
     """
     Handle username input during registration.
-    Validates name, creates user, and sends welcome message.
+    Validates name, creates user, processes referral reward if applicable,
+    and sends welcome message.
     """
     user_id = message.from_user.id
     name = message.text.strip()
@@ -44,6 +45,20 @@ async def process_name(message: Message, state: FSMContext):
     
     lang = get_lang_from_code(message.from_user.language_code)
     await create_user(user_id, name, lang)
+    
+    state_data = await state.get_data()
+    referrer_id = state_data.get('referrer_id')
+    
+    if referrer_id:
+        from db.database import Database
+        db = Database()
+        await db.update_user(
+            "UPDATE Users SET Coins = Coins + 40000, ReceivedCoins = ReceivedCoins + 40000, ReferralsCount = ReferralsCount + 1 WHERE UserId = ?",
+            (referrer_id,)
+        )
+        logger.info(f"User {user_id} referred by {referrer_id}, awarded 40000 coins to referrer")
+        await db.log_action(referrer_id, "referral", 40000, f"Referred user {user_id}")
+    
     await state.clear()
     
     user_data = await get_user(user_id)

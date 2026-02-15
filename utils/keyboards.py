@@ -5,7 +5,7 @@ Provides functions for creating inline keyboards.
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from utils.i18n import tr, locales
+from utils.i18n import tr, locales, get_available_locales
 
 
 async def create_games_markup(user_id: int) -> InlineKeyboardMarkup:
@@ -24,13 +24,13 @@ async def create_play_button_markup(user_id: int, callback_data: str) -> InlineK
 
 
 def create_lang_selection_markup() -> InlineKeyboardMarkup:
-    """Create inline keyboard for language selection."""
+    """Create inline keyboard for language selection dynamically from available locales."""
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(
             text=f"{locales[lang]['config']['loc_flag']} {locales[lang]['config']['loc_name']}",
             callback_data=f"lang:{lang}"
         )]
-        for lang in locales
+        for lang in get_available_locales()
     ])
 
 
@@ -50,3 +50,25 @@ async def create_main_menu_markup(user_id: int) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text=await tr(user_id, 'messages.referral'), callback_data='referral')],
         [InlineKeyboardButton(text=await tr(user_id, 'messages.changelang'), callback_data='changelang')]
     ])
+
+
+async def create_referral_markup(user_id: int, referral_link: str) -> InlineKeyboardMarkup:
+    """
+    Create inline keyboard for referral system with share and copy buttons.
+    Uses Telegram's built-in share functionality and deep linking.
+    """
+    share_text = await tr(user_id, 'messages.share_referral')
+    copy_text = await tr(user_id, 'messages.copy_link')
+    
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text=share_text,
+            url=f"https://t.me/share/url?url={referral_link}"
+        )],
+        [InlineKeyboardButton(
+            text=copy_text,
+            url=referral_link
+        )]
+    ])
+
+

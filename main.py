@@ -22,7 +22,6 @@ from utils.logging import logger
 load_dotenv(dotenv_path=Path(__file__).parent / '.env')
 
 dp = Dispatcher()
-setup_handlers(dp)
 
 
 async def start_bot() -> None:
@@ -45,15 +44,17 @@ async def start_bot() -> None:
     
     try:
         bot_info = await bot.get_me()
+        logger.info("Bot successfully started")
+        logger.info(f"Username: @{bot_info.username}")
+        logger.info(f"ID: {bot_info.id}")
     except (aiogram.exceptions.TelegramConflictError, aiogram.exceptions.TelegramUnauthorizedError) as e:
         logger.critical(f"Can't start bot: {e}")
         await bot.session.close()
         sys.exit(1)
     
-    logger.info("Bot successfully started")
-    logger.info(f"Username: @{bot_info.username}")
-    logger.info(f"ID: {bot_info.id}")
+    setup_handlers(dp)
     await dp.start_polling(bot)
+
 
 
 async def main() -> None:

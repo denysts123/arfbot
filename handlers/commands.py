@@ -2,7 +2,6 @@
 Command handlers module.
 Registers all bot commands and callback handlers.
 """
-from os import getenv
 from aiogram.filters import CommandStart, Command
 from aiogram import F
 from aiogram.types import Message, CallbackQuery
@@ -16,7 +15,7 @@ from utils.auth import check_user
 from utils.keyboards import (
     create_games_markup, create_play_button_markup,
     create_lang_selection_markup, create_games_and_events_markup,
-    create_main_menu_markup
+    create_main_menu_markup, create_referral_markup
 )
 from handlers.registration import RegistrationStates, process_name
 from game.penalty import play_penalty, check_penalty_access
@@ -45,22 +44,11 @@ def checked_handler(dp, *filters):
 
 
 async def send_welcome(message: Message):
-    """Handle the /start command with optional referral processing."""
+    """
+    Handle the /start command.
+    Shows welcome message to existing users.
+    """
     user_id = message.from_user.id
-    args = message.text.split()[1] if len(message.text.split()) > 1 else None
-    
-    if args and args.isdigit():
-        referrer_id = int(args)
-        if referrer_id != user_id:
-            referrer_data = await get_user(referrer_id)
-            if referrer_data and not await is_banned(referrer_id):
-                await db.update_user(
-                    "UPDATE Users SET Coins = Coins + 40000, ReceivedCoins = ReceivedCoins + 40000, ReferralsCount = ReferralsCount + 1 WHERE UserId = ?",
-                    (referrer_id,)
-                )
-                logger.info(f"User {user_id} referred by {referrer_id}, awarded 40000 coins")
-                await db.log_action(referrer_id, "referral", 40000, f"Referred user {user_id}")
-    
     logger.info(f"User {user_id} used /start command")
     user_data = await get_user(user_id)
     text = await format_welcome_message(user_id, user_data)
@@ -68,7 +56,9 @@ async def send_welcome(message: Message):
 
 
 async def send_full_info(update: Message | CallbackQuery):
-    """Handle full_info command or callback by sending detailed user statistics."""
+    """
+    Handle full_info command or callback by sending detailed user statistics.
+    """
     user_id = update.from_user.id
     logger.info(f"User {user_id} viewed full stats")
     
@@ -86,7 +76,9 @@ async def send_full_info(update: Message | CallbackQuery):
 
 
 async def send_change_lang(message: Message):
-    """Handle language change by showing language selection keyboard."""
+    """
+    Handle language change by showing language selection keyboard.
+    """
     user_id = message.from_user.id
     logger.info(f"User {user_id} opened language selection")
     keyboard = create_lang_selection_markup()
@@ -95,7 +87,9 @@ async def send_change_lang(message: Message):
 
 
 async def handle_lang_change(callback: CallbackQuery):
-    """Handle language change callback."""
+    """
+    Handle language change callback.
+    """
     user_id = callback.from_user.id
     lang = callback.data.split(":")[1]
     logger.info(f"User {user_id} changed language to {lang}")
@@ -106,7 +100,9 @@ async def handle_lang_change(callback: CallbackQuery):
 
 
 async def send_games_menu(update: Message | CallbackQuery):
-    """Send games menu with available game options."""
+    """
+    Send games menu with available game options.
+    """
     user_id = update.from_user.id
     logger.info(f"User {user_id} opened games menu")
     markup = await create_games_markup(user_id)
@@ -119,7 +115,9 @@ async def send_games_menu(update: Message | CallbackQuery):
 
 
 async def send_games_and_events_menu(callback: CallbackQuery):
-    """Send games and events selection menu."""
+    """
+    Send games and events selection menu.
+    """
     user_id = callback.from_user.id
     logger.info(f"User {user_id} opened games and events menu")
     markup = await create_games_and_events_markup(user_id)
@@ -129,7 +127,9 @@ async def send_games_and_events_menu(callback: CallbackQuery):
 
 
 async def send_penalty_menu(callback: CallbackQuery):
-    """Send penalty menu with access check."""
+    """
+    Send penalty menu with access check.
+    """
     user_id = callback.from_user.id
     if not await check_penalty_access(user_id):
         msg = await tr(user_id, 'messages.penalty_start')
@@ -143,7 +143,9 @@ async def send_penalty_menu(callback: CallbackQuery):
 
 
 async def send_matches_menu(callback: CallbackQuery):
-    """Send matches menu with requirements and play button."""
+    """
+    Send matches menu with requirements and play button.
+    """
     user_id = callback.from_user.id
     logger.info(f"User {user_id} opened matches menu")
     markup = await create_play_button_markup(user_id, "play_match")
@@ -153,7 +155,10 @@ async def send_matches_menu(callback: CallbackQuery):
 
 
 async def play_game(callback: CallbackQuery, game_func):
-    """Execute a game function and send start and result messages."""
+    """
+    Execute a game function and send start and result messages.
+    """
+    await callback.answer()
     user_id = callback.from_user.id
     game_data = await game_func(user_id)
     if "error" in game_data:
@@ -164,23 +169,33 @@ async def play_game(callback: CallbackQuery, game_func):
 
 
 async def send_referral_info(update: Message | CallbackQuery):
-    """Send referral info with link and statistics."""
+    """
+    Send referral info with link, statistics and convenient sharing buttons.
+    """
     user_id = update.from_user.id
     logger.info(f"User {user_id} viewed referral info")
     user_data = await get_user(user_id)
     referrals_count = user_data[REFERRALS_COUNT]
-    referral_link = f"https://t.me/{getenv('BOT_USERNAME')}?start={user_id}"
+    
+    bot = update.bot
+    bot_info = await bot.get_me()
+    referral_link = f"https://t.me/{bot_info.username}?start={user_id}"
+    
     text = await tr(user_id, 'messages.referral_info')
     text = text.format(link=referral_link, count=referrals_count)
+    markup = await create_referral_markup(user_id, referral_link)
+    
     if isinstance(update, CallbackQuery):
         await update.answer()
-        await update.message.answer(text)
+        await update.message.answer(text, reply_markup=markup)
     else:
-        await update.answer(text)
+        await update.answer(text, reply_markup=markup)
 
 
 def setup_handlers(dp):
-    """Register all message and callback handlers with the dispatcher."""
+    """
+    Register all message and callback handlers with the dispatcher.
+    """
     dp.message.register(process_name, RegistrationStates.waiting_for_name)
 
     @checked_handler(dp, CommandStart())
@@ -241,5 +256,6 @@ def setup_handlers(dp):
 
     @checked_handler(dp, F.data == "changelang")
     async def changelang_callback_handler(callback: CallbackQuery, state=None):
+        await callback.answer()
         if callback.message:
             await send_change_lang(callback.message)

@@ -1,170 +1,172 @@
-﻿config:
-  loc_name: "Čeština (CZ)"
+config:
+  loc_name: "Čeština"
   loc_flag: "🇨🇿"
 messages:
   welcome: |
-    ID: {user_id}
-    Jméno: {username}
-    Mince: {coins}
-    Lístky: {tickets}
-    Poháry: {cups}
-    O hráči:
+    👤 ID: {user_id}
+    📝 Jméno: {username}
+    💰 Mince: {coins}
+    🎫 Vstupenky: {tickets}
+    🏆 Poháry: {cups}
+    ℹ️ O hráči:
     {user_info}
   full_info: |
-    Statistiky hráče "{username}"
-    Mince: {coins}
-    Lístky: {tickets}
-    Poháry: {cups}
+    📊 Statistiky hráče "{username}"
+    💰 Mince: {coins}
+    🎫 Vstupenky: {tickets}
+    🏆 Poháry: {cups}
 
-    Celkem získáno mincí: {received_coins}
-    Celkem získáno lístků: {received_tickets}
-    Celkem odehráno zápasů: {games_played}
+    💸 Celkem získaných mincí: {received_coins}
+    🎟️ Celkem získaných vstupenek: {received_tickets}
+    ⚽ Celkem odehraných zápasů: {games_played}
     Z toho jste:
-    {victories}krát vyhráli ({win_rate:.2f}%)
-    {defeats}krát prohráli
-    {draws}krát remizovali
-    Otevřeno balíčků:
-    {small_packs} malých
-    {medium_packs} středních
-    {big_packs} velkých
-    Pozváno lidí prostřednictvím referenčního odkazu: {referrals}
-    Datum registrace: {register_date}
+    ✅ {victories} krát vyhráli ({win_rate:.2f}%)
+    ❌ {defeats} krát prohráli
+    🤝 {draws} krát remizovali
+    📦 Otevřené balíčky:
+    📦 {small_packs} malé
+    📦 {medium_packs} střední
+    📦 {big_packs} velké
+    👥 Lidé pozvaní přes odkaz: {referrals}
+    📅 Datum registrace: {register_date}
 
-    Také si uvědomte, že některé množství těchto zdrojů nebude započítáno, pokud vám byly vydány správci (tj. duchové):
-    Duchové malé balíčky: {ghost_small}
-    Duchové střední balíčky: {ghost_medium}
-    Duchové velké balíčky: {ghost_big}
-    Nezapočítaný úspěch: {ghost_success}
+    ⚠️ Upozorňujeme také, že některé zdroje se nepočítají, pokud byly vydány administrátory (tzv. ghost):
+    👻 Ghost malé balíčky: {ghost_small}
+    👻 Ghost střední balíčky: {ghost_medium}
+    👻 Ghost velké balíčky: {ghost_big}
+    👻 Nezapočítaný úspěch: {ghost_success}
 
 
-    Váš celkový úspěch: {success}
-    Nacházíte se na {position} místě v topu bota
-    Vaše hodnost: {rank}
-    Úroveň FP: {fp_level}N/A (brzy)
-  banned: "Jste zakázáni a nemůžete používat tohoto bota.\nDatum ukončení zákazu: {ban_date}"
-  user_not_found: "Uživatel nebyl nalezen."
-  select_lang: "Vyberte svůj jazyk:"
-  lang_changed: "Jazyk byl úspěšně změněn!"
-  select_name: "Zadejte prosím své jméno pro registraci:"
-  name_empty: "Jméno nemůže být prázdné. Zadejte prosím své jméno:"
-  games_and_events: "Vyberte sekci:"
-  games: "Hry"
-  events: "Události"
-  penalty: "Penalty Series"
-  penalty_start: "Penalty series! Potřebujete 25000 úspěchu k hraní."
-  penalty_result: "Gólů: {goals}/5, Odměna: {reward} mincí, Pokusů zbývá: {left}"
-  matches: "Zápasy"
-  match_start: "Zápas proti {opponent} ({success})"
-  match_win: "Vyhráli jste {score1}:{score2}, +11000 mincí, +10 pohárů!"
-  match_lose: "Prohráli jste {score1}:{score2}. Důvod: {reason}"
-  match_draw: "Remíza {score1}:{score2}"
+    🌟 Váš celkový úspěch: {success}
+    🏅 Jste na {position}. místě v topu bota
+    👑 Vaše hodnost: {rank}
+    ⭐ Úroveň FP: {fp_level}N/A (brzy)
+  banned: "🚫 Máte ban a nemůžete používat tohoto bota.\n📅 Datum ukončení banu: {ban_date}"
+  user_not_found: "❌ Uživatel nenalezen."
+  select_lang: "🌐 Vyberte svůj jazyk:"
+  lang_changed: "✅ Jazyk byl úspěšně změněn!"
+  select_name: "👋 Pro registraci zadejte své jméno:"
+  name_empty: "⚠️ Jméno nesmí být prázdné. Zadejte své jméno:"
+  games_and_events: "🎮 Vyberte sekci:"
+  games: "🎮 Hry"
+  events: "🎉 Události"
+  penalty: "⚽ Penaltový rozstřel"
+  penalty_start: "⚽ Penaltový rozstřel! Ke hře potřebujete 25000 úspěchů."
+  penalty_result: "⚽ Góly: {goals}/5\n💰 Odměna: {reward} mincí\n🎯 Zbývající pokusy: {left}"
+  matches: "⚽ Zápasy"
+  match_start: "⚽ Zápas proti {opponent} ({success})"
+  match_win: "🎉 Vyhráli jste {score1}:{score2}\n💰 +11000 mincí\n🏆 +10 pohárů!"
+  match_lose: "😔 Prohráli jste {score1}:{score2}\n❌ Důvod: {reason}"
+  match_draw: "🤝 Remíza {score1}:{score2}"
   loss_reasons:
     - "Rozhodčí byl nespravedlivý"
-    - "Byl jsi v špatné náladě"
-    - "Nehrál jsi jako tým"
+    - "Měli jste špatnou náladu"
+    - "Nehráli jste jako tým"
     - "Nedostatek zkušeností"
-    - "Špatné zdraví"
+    - "Špatný zdravotní stav"
     - "Špatná koncentrace"
-    - "Nešťastná shoda okolností"
-    - "Protivník byl silnější"
+    - "Nepříznivé okolnosti"
+    - "Soupeř byl silnější"
     - "Špatná volba taktiky"
-    - "Minul jsi se v rozhodujícím okamžiku"
-    - "Byl jsi příliš unavený"
+    - "Chyba v rozhodujícím okamžiku"
+    - "Přílišná únava"
     - "Smůla"
     - "Zranění"
     - "Špatná komunikace v týmu"
     - "Špatná volba složení týmu"
-    - "Příliš pilně jsi dodržoval taktiku, aniž bys zvažoval akce soupeře"
+    - "Přílišné lpění na taktice bez ohledu na soupeře"
     - "Někteří hráči v týmu nezvládli zátěž"
-    - "Příliš jsi se vzdal po inkasovaném gólu"
-    - "Nedostatek spánku předchozí noci"
-    - "Protivník použil zakázané techniky"
+    - "Po inkasovaném gólu jste se příliš vzdali"
+    - "Nedostatek spánku předchozí noc"
+    - "Soupeř použil zakázané techniky"
     - "Nedostatečná motivace v týmu"
-    - "Žádná chemie mezi hráči týmu"
-    - "Protivník je kreativnější a vynalézavější"
-    - "Nepodařilo se ti přizpůsobit stylu hry soupeře"
-    - "Příliš mnoho tlaku na hráče"
-    - "Nedostatek času na přípravu na zápas"
-    - "Žádná plná koncentrace na hru"
-    - "Špatně zvolený okamžik pro útok"
+    - "Žádná chemie mezi hráči"
+    - "Soupeř byl kreativnější a vynalézavější"
+    - "Nedokázali jste se přizpůsobit stylu hry soupeře"
+    - "Příliš velký tlak na hráče"
+    - "Málo času na přípravu zápasu"
+    - "Nedostatečná koncentrace na hru"
+    - "Špatně zvolený moment k útoku"
     - "Nedostatečná herní praxe"
-    - "Protivník je techničtější a zručnější"
+    - "Soupeř byl techničtější a zručnější"
     - "Příliš mnoho chyb ve hře"
-    - "Protivník byl více motivovaný a chtěl vítězství více"
-    - "Žádné vzájemné porozumění v týmu"
-    - "Udělal jsi špatné rozhodnutí v rozhodujícím okamžiku"
-    - "Protivník použil neočekávané taktiky"
-    - "Nedostatek koordinace v týmu"
+    - "Soupeř byl motivovanější a více chtěl vyhrát"
+    - "Chybějící vzájemné porozumění v týmu"
+    - "V rozhodujícím okamžiku jste se špatně rozhodli"
+    - "Soupeř použil nečekanou taktiku"
+    - "Nedostatečná koordinace v týmu"
     - "Špatné povětrnostní podmínky"
     - "Problémy s vybavením"
-    - "Protivník hrál velmi agresivně"
-    - "Nedostatečná důvěra ve své schopnosti"
-    - "Protivník použil efektivnější taktiky"
+    - "Soupeř hrál velmi agresivně"
+    - "Nedostatečná sebedůvěra"
+    - "Soupeř použil efektivnější taktiku"
     - "Špatná volba vybavení"
     - "Nedostatečná vytrvalost"
     - "Špatná volba stravy"
-    - "Protivník měl silnější podporu od fanoušků"
-    - "Nedostatečné pochopení pravidel hry"
-    - "Špatná kontrola nad emocemi"
-    - "Protivník je příliš rychlý a obratný"
-    - "Stal jsi se příliš defenzivním po začátku zápasu"
-    - "Špatně jsi odhadl schopnosti svého týmu"
+    - "Soupeř měl silnější podporu fanoušků"
+    - "Nedostatečné porozumění pravidlům hry"
+    - "Špatné ovládání emocí"
+    - "Soupeř byl příliš rychlý a mrštný"
+    - "Po začátku zápasu jste začali příliš bránit"
+    - "Špatně jste odhadli schopnosti svého týmu"
     - "Nedostatečná znalost taktiky a strategie"
     - "Špatná forma před zápasem"
-    - "Protivník použil lstivost a podvod během hry"
-    - "Nedostatečný efektivní trénink před zápasem"
-    - "Špatná volba partnerů pro hru"
-    - "Nedostatek zkušeností ve hrách na vysoké úrovni"
-    - "Chyby při přípravě na zápas"
-    - "Neschopnost přizpůsobit se měnícím se podmínkám hry"
+    - "Soupeř během hry používal lsti a klamy"
+    - "Nedostatečně efektivní trénink před zápasem"
+    - "Špatná volba spoluhráčů"
+    - "Nedostatek zkušeností v zápasech vysoké úrovně"
+    - "Chyby v přípravě na zápas"
+    - "Neschopnost přizpůsobit se měnícím se podmínkám"
     - "Špatná motivace od trenéra"
-    - "Byl jsi nervózní před zápasem a nemohl ses uvolnit"
-    - "Protivník byl fyzicky lépe připraven"
-    - "Nedostatečná efektivní obranná taktika"
-    - "Nedostatečně nastavený systém týmové hry"
+    - "Před zápasem jste byli nervózní a nedokázali se uvolnit"
+    - "Soupeř byl lépe fyzicky připraven"
+    - "Nedostatečně efektivní taktika obrany"
+    - "Nedostatečně vybudovaný systém týmové hry"
     - "Špatná volba taktiky pro konkrétního soupeře"
-    - "Protivník použil jemnější taktické triky"
+    - "Soupeř použil jemnější taktické triky"
     - "Nedostatek podpory od fanoušků"
-    - "Špatné pocit v den zápasu"
-    - "Špatně jsi odhadl síly svých soupeřů"
-    - "Příliš mnoho rušivých faktorů mimo hřiště"
-    - "Nedostatečně efektivní správa složení týmu"
-    - "Nepodařilo se ti přizpůsobit se měnícím se podmínkám hry"
-    - "Protivník byl lépe připraven psychologicky"
-    - "Nedostatečně vyvinuté intuitivní porozumění ostatním členům týmu"
-    - "Zažil jsi fyzickou bolest nebo nepohodlí během hry"
-    - "Nedostatek profesionální pomoci při sestavování taktiky"
-    - "Protivník příliš dobře znal tvé silné a slabé stránky"
-    - "Byl jsi příliš předvídatelný ve své hře"
-    - "Nedostatečná efektivní útočná taktika"
-    - "Protivník hrál v týmu déle a efektivněji"
-    - "Příliš mnoho času bylo stráveno přemítáním o neúspěších v předchozích zápasech"
-    - "Nedostatečně času věnovaného učení fyzickým a technickým aspektům hry"
-    - "Špatná volba okamžiku pro výměnu hráčů"
+    - "Špatný pocit v den zápasu"
+    - "Špatně jste odhadli sílu soupeřů"
+    - "Příliš mnoho rušivých vlivů mimo hřiště"
+    - "Nedostatečně efektivní řízení sestavy týmu"
+    - "Nedokázali jste se přizpůsobit měnícím se herním podmínkám"
+    - "Soupeř byl lépe psychicky připraven"
+    - "Nedostatečně rozvinuté intuitivní porozumění ostatním členům týmu"
+    - "Během hry jste pociťovali fyzickou bolest nebo nepohodlí"
+    - "Nedostatek profesionální pomoci při vývoji taktiky"
+    - "Soupeř příliš dobře znal vaše silné a slabé stránky"
+    - "Ve své hře jste byli příliš předvídatelní"
+    - "Nedostatečně efektivní taktika útoku"
+    - "Soupeř hrál v týmu déle a efektivněji"
+    - "Příliš mnoho času bylo stráveno přemýšlením o neúspěších v předchozích zápasech"
+    - "Nedostatek času věnovaného studiu fyzických a technických aspektů hry"
+    - "Špatně zvolený okamžik pro střídání hráčů"
     - "Nedostatek disciplíny v týmu"
-    - "Nedodržoval jsi svou strategii"
-    - "Protivník byl lépe připraven na konkrétní hru"
-    - "Protivník použil jemnější manévry a taktiku"
-    - "Protivník hrál velmi silně na začátku hry a nastavil vítězný průběh"
-    - "Tým není dostatečně zkušený celkově"
-    - "Vnější faktory, jako počasí nebo kvalita hřiště, negativně ovlivnily tvou hru"
-    - "Protivník měl hlavního trenéra s většími zkušenostmi než ty"
-    - "Protivník používá inovativní metody tréninku a přípravy"
+    - "Nedodrželi jste svou strategii"
+    - "Soupeř byl lépe připraven na konkrétní hru"
+    - "Soupeř použil jemnější manévry a taktiku"
+    - "Soupeř hrál na začátku hry velmi silně a nasadil vítězný kurz"
+    - "Tým jako celek není dostatečně zkušený"
+    - "Vnější faktory jako počasí nebo kvalita hřiště negativně ovlivnily vaši hru"
+    - "Soupeř měl hlavního trenéra s více zkušenostmi než vy"
+    - "Soupeř používá inovativní metody tréninku a přípravy"
     - "Špatné rozdělení rolí v týmu"
     - "Nedostatek mentální přípravy na hru"
     - "Příliš slabý nebo neefektivní vůdce v týmu"
-    - "Nedostatečná efektivita univerzality ve složení týmu"
-    - "Protivník použil silnou obrannou taktiku, která bránila tvému týmu skórovat góly"
-  commands_list: "Dostupné příkazy:\n/games - Hrát hry\n/stats - Zobrazit statistiky\n/profile - Nastavení profilu\n/shop - Obchod\n/referral - Referenční systém\n/changelang - Změnit jazyk"
-  no_attempts_left: "Nemáte žádné pokusy!"
-  match_started: "Zápas začal"
-  wait_15_seconds: "Zápas začal, čekejte 15 sekund..."
-  match_requirements: "Pro hraní zápasu potřebujete 5000 mincí a 1 lístek"
-  insufficient_resources: "Nedostatečné zdroje!"
-  no_opponents: "Žádní dostupní soupeři!"
-  opponent_search_error: "Chyba vyhledávání soupeře!"
-  play_button: "Hrát"
-  referral_info: "Váš referenční odkaz: {link}\nPozvaní referenti: {count}\nZískejte 40000 mincí za každého referenta!"
-  stats: "Statistiky"
-  referral: "Referenti"
-  changelang: "Změnit jazyk"
+    - "Nedostatečná efektivita všestrannosti v sestavě týmu"
+    - "Soupeř použil silnou obrannou taktiku, která vašemu týmu zabránila skórovat"
+  commands_list: "📋 Dostupné příkazy:\n🎮 /games - Hrát hry\n📊 /stats - Zobrazit statistiky\n👤 /profile - Nastavení profilu\n🛒 /shop - Obchod\n👥 /referral - Referenční systém\n🌐 /changelang - Změnit jazyk"
+  no_attempts_left: "❌ Už vám nezbývají žádné pokusy!"
+  match_started: "⚽ Zápas začal"
+  wait_15_seconds: "⏳ Zápas začal, počkejte 15 sekund..."
+  match_requirements: "💰 Ke hře potřebujete 5000 mincí a 1 vstupenku"
+  insufficient_resources: "❌ Nedostatek zdrojů!"
+  no_opponents: "❌ Žádní dostupní soupeři!"
+  opponent_search_error: "❌ Chyba při hledání soupeře!"
+  play_button: "▶️ Hrát"
+  referral_info: "🎁 Váš referenční odkaz:\n{link}\n\n👥 Pozvaní referali: {count}\n💰 Získejte 40000 mincí za každého referala!"
+  share_referral: "📤 Sdílet odkaz"
+  copy_link: "📋 Kopírovat odkaz"
+  stats: "📊 Statistiky"
+  referral: "👥 Referal"
+  changelang: "🌐 Změnit jazyk"

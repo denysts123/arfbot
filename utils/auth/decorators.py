@@ -19,6 +19,7 @@ def check_user(func: Callable) -> Callable:
     """
     Decorator to verify user exists and is not banned before executing handler.
     Starts registration flow if user not found.
+    Extracts referral parameter from /start command if present.
     """
 
     @wraps(func)
@@ -29,9 +30,28 @@ def check_user(func: Callable) -> Callable:
         user_data = await get_user(user_id)
         if user_data is None:
             logger.info(f"User {user_id} not found, starting registration")
+            
+            referrer_id = None
+            if hasattr(update, 'text') and update.text:
+                args = update.text.split()[1] if len(update.text.split()) > 1 else None
+                if args and args.isdigit():
+                    potential_referrer = int(args)
+                    if potential_referrer != user_id:
+                        referrer_data = await get_user(potential_referrer)
+                        if referrer_data and not await is_banned(potential_referrer):
+                            referrer_id = potential_referrer
+                            logger.info(f"User {user_id} has valid referrer {referrer_id}")
+            
             await state.set_state(RegistrationStates.waiting_for_name)
+            if referrer_id:
+                await state.update_data(referrer_id=referrer_id)
+            
             text = get_translation('en_US', 'messages.select_name')
-            await update.answer(text)
+            if isinstance(update, CallbackQuery):
+                await update.answer()
+                await update.message.answer(text)
+            else:
+                await update.answer(text)
             return None
 
         if await is_banned(user_id):
