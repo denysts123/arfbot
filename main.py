@@ -1,7 +1,11 @@
-﻿import asyncio
+﻿"""
+Main entry point for the Telegram bot application.
+Initializes the bot, sets up handlers, and starts polling.
+"""
+
+import asyncio
 import sys
 from os import getenv
-from dotenv import load_dotenv
 from pathlib import Path
 
 import aiogram.exceptions
@@ -9,6 +13,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand
+from dotenv import load_dotenv
 
 from handlers.commands import setup_handlers
 from utils.bootstrap_dir import bootstrap
@@ -21,11 +26,13 @@ setup_handlers(dp)
 
 
 async def start_bot() -> None:
-    """Starts the bot by establishing a connection, verifying bot credentials, logging essential information, and initiating the polling loop for handling updates."""
+    """
+    Start the bot by establishing connection, setting commands, and starting polling.
+    Logs essential bot information on successful startup.
+    """
     logger.info("Starting bot...")
     bot = Bot(token=getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     
-    # Set bot commands
     commands = [
         BotCommand(command="start", description="Start the bot and show main menu"),
         BotCommand(command="full_info", description="View detailed statistics"),
@@ -42,16 +49,18 @@ async def start_bot() -> None:
         logger.critical(f"Can't start bot: {e}")
         await bot.session.close()
         sys.exit(1)
-    else:
-        logger.info("Bot successfully started.")
-        logger.info("Bot information:")
-        logger.info(f"Username: @{bot_info.username}")
-        logger.info(f"ID: {bot_info.id}")
-        await dp.start_polling(bot)
+    
+    logger.info("Bot successfully started")
+    logger.info(f"Username: @{bot_info.username}")
+    logger.info(f"ID: {bot_info.id}")
+    await dp.start_polling(bot)
 
 
 async def main() -> None:
-    """Serves as the main entry point of the application, executing bootstrap procedures for initial setup and subsequently starting the bot."""
+    """
+    Main entry point of the application.
+    Runs bootstrap checks and starts the bot.
+    """
     await bootstrap()
     await start_bot()
 
@@ -60,5 +69,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.info("Bot stopped by user.")
+        logger.info("Bot stopped by user")
         sys.exit(0)

@@ -1,21 +1,31 @@
-﻿import game.constants as constants
+﻿"""
+Game statistics calculation module.
+Provides functions for calculating success scores and win rates.
+"""
+
+import game.constants as constants
 from utils.user_fields import *
 
 
 def calculate_success(user_data: tuple) -> int:
-    """Calculate the user's success score based on victories, defeats, packs, and referrals, subtracting ghost success."""
-    victories, defeats = user_data[VICTORIES], user_data[DEFEATS]
-    small_packs, medium_packs, big_packs = user_data[SMALL_PACKS], user_data[MEDIUM_PACKS], user_data[BIG_PACKS]
-    referrals_count = user_data[REFERRALS_COUNT]
+    """
+    Calculate the user's success score based on victories, defeats, packs, and referrals.
+    Ghost packs are subtracted from the total.
+    """
+    skill = user_data[VICTORIES] * constants.VICTORY_COEFFICIENT + user_data[DEFEATS] * constants.DEFEAT_COEFFICIENT
 
-    skill = victories * constants.VICTORY_COEFFICIENT + defeats * constants.DEFEAT_COEFFICIENT
-    resources = (small_packs * constants.SMALL_PACK_COEFFICIENT +
-                 medium_packs * constants.MEDIUM_PACK_COEFFICIENT +
-                 big_packs * constants.BIG_PACK_COEFFICIENT)
-    bonus = referrals_count * constants.REFERRALS_COEFFICIENT
+    resources = (
+        user_data[SMALL_PACKS] * constants.SMALL_PACK_COEFFICIENT +
+        user_data[MEDIUM_PACKS] * constants.MEDIUM_PACK_COEFFICIENT +
+        user_data[BIG_PACKS] * constants.BIG_PACK_COEFFICIENT
+    )
 
-    ghost_success = sum(user_data[i] * getattr(constants, f'GHOST_{["SMALL", "MEDIUM", "BIG"][i-GHOST_SMALL_PACKS]}_PACKS_COEFFICIENT')
-                       for i in range(GHOST_SMALL_PACKS, GHOST_BIG_PACKS + 1))
+    bonus = user_data[REFERRALS_COUNT] * constants.REFERRALS_COEFFICIENT
+
+    ghost_success = sum(
+        user_data[i] * getattr(constants, f'GHOST_{["SMALL", "MEDIUM", "BIG"][i - GHOST_SMALL_PACKS]}_PACKS_COEFFICIENT')
+        for i in range(GHOST_SMALL_PACKS, GHOST_BIG_PACKS + 1)
+    )
 
     return skill + resources + bonus - ghost_success
 

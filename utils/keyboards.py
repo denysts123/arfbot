@@ -1,54 +1,52 @@
-﻿from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+﻿"""
+Keyboard utilities module.
+Provides functions for creating inline keyboards.
+"""
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from utils.i18n import tr, locales
 
 
 async def create_games_markup(user_id: int) -> InlineKeyboardMarkup:
-    """Create inline keyboard for games selection with translated buttons."""
-    penalty_text = await tr(user_id, 'messages.penalty')
-    matches_text = await tr(user_id, 'messages.matches')
+    """Create inline keyboard for games selection."""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=penalty_text, callback_data='penalty')],
-        [InlineKeyboardButton(text=matches_text, callback_data='matches')]
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.penalty'), callback_data='penalty')],
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.matches'), callback_data='matches')]
     ])
 
 
 async def create_play_button_markup(user_id: int, callback_data: str) -> InlineKeyboardMarkup:
-    """Create inline keyboard with play button using translated text."""
-    play_text = await tr(user_id, 'messages.play_button')
+    """Create inline keyboard with a play button."""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=play_text, callback_data=callback_data)]
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.play_button'), callback_data=callback_data)]
     ])
 
 
 def create_lang_selection_markup() -> InlineKeyboardMarkup:
-    """Create inline keyboard for language selection using available locales."""
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=f"{locales[lang]['config']['loc_flag']} {locales[lang]['config']['loc_name']}", callback_data=f"lang:{lang}")]
+    """Create inline keyboard for language selection."""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text=f"{locales[lang]['config']['loc_flag']} {locales[lang]['config']['loc_name']}",
+            callback_data=f"lang:{lang}"
+        )]
         for lang in locales
     ])
-    return keyboard
 
 
 async def create_games_and_events_markup(user_id: int) -> InlineKeyboardMarkup:
-    """Create inline keyboard for games and events selection with translated buttons."""
-    games_text = await tr(user_id, 'messages.games')
-    events_text = await tr(user_id, 'messages.events')
+    """Create inline keyboard for games and events selection."""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=games_text, callback_data='games')],
-        [InlineKeyboardButton(text=events_text, callback_data='events')]
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.games'), callback_data='games')],
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.events'), callback_data='events')]
     ])
 
 
 async def create_main_menu_markup(user_id: int) -> InlineKeyboardMarkup:
-    """Create inline keyboard for main menu navigation with translated buttons."""
-    games_text = await tr(user_id, 'messages.games')
-    stats_text = await tr(user_id, 'messages.stats')
-    referral_text = await tr(user_id, 'messages.referral')
-    changelang_text = await tr(user_id, 'messages.changelang')
+    """Create inline keyboard for main menu navigation."""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=games_text, callback_data='games')],
-        [InlineKeyboardButton(text=stats_text, callback_data='full_info')],
-        [InlineKeyboardButton(text=referral_text, callback_data='referral')],
-        [InlineKeyboardButton(text=changelang_text, callback_data='changelang')]
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.games'), callback_data='games')],
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.stats'), callback_data='full_info')],
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.referral'), callback_data='referral')],
+        [InlineKeyboardButton(text=await tr(user_id, 'messages.changelang'), callback_data='changelang')]
     ])

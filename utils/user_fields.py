@@ -1,4 +1,7 @@
-﻿# User table field indices for easier code maintenance
+﻿"""
+User table field indices for easier code maintenance.
+Must match the order of columns in the Users table in init.sql.
+"""
 USER_ID = 0
 USERNAME = 1
 USER_INFO = 2
@@ -18,15 +21,16 @@ PENALTY_SCORED = 15
 REFERRALS_COUNT = 16
 RECEIVED_COINS = 17
 RECEIVED_TICKETS = 18
-GHOST_SMALL_PACKS = 19
-GHOST_MEDIUM_PACKS = 20
-GHOST_BIG_PACKS = 21
-SMALL_PACKS = 22
-MEDIUM_PACKS = 23
-BIG_PACKS = 24
+SMALL_PACKS = 19
+MEDIUM_PACKS = 20
+BIG_PACKS = 21
+GHOST_SMALL_PACKS = 22
+GHOST_MEDIUM_PACKS = 23
+GHOST_BIG_PACKS = 24
 IS_BANNED = 25
 BAN_END = 26
 WARNS = 27
 LEVEL = 28
 REGISTER_DATE = 29
 LANG = 30
+SUCCESS = 31
